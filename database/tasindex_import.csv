@@ -1,0 +1,5 @@
+COSPAR_ID,Spacecraft_Name,Analysis_Object,Software1,Version1,Software2,Version2,Software3,Version3,Software4,Version4,Software5,Version5,Reference1,Reference2,Reference3,Description
+1989-033B,Magellan,System,SINDA,,TRASYS,,,,,,,,Neumann1993,,,
+1990-037B,HST,System,THERM,,SINDA,,TRASYS,,TSS,,TAL,,Nguyen2006,,,
+1990-090B,Ulysses  ,System,SINDA,,ESATAN,,,,,,,,Bishop2005,,,
+1992-052A,Topex/Poseidon,System,TRASYS,,SINDA,,,,,,,,Antreasian1992,,,

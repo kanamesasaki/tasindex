@@ -1,0 +1,71 @@
+erDiagram
+    %% Entity Definitions
+    Spacecraft {
+        INT SpacecraftID PK "Spacecraft ID (Primary Key)"
+        TEXT COSPAR_ID "COSPAR ID"
+        TEXT NSSDCA_ID "NSSDCA ID"
+        TEXT SpacecraftName "Spacecraft Name"
+        INT LaunchYear "Launch Year"
+    }
+
+    ThermalAnalysisObject {
+        INT ObjectID PK "Object ID (Primary Key)"
+        INT SpacecraftID FK "Spacecraft ID (Foreign Key)"
+        TEXT AnalysisObject "Analysis Object Name"
+    }
+
+    ThermalAnalysisEntry {
+        INT EntryID PK "Entry ID (Primary Key)"
+        INT ObjectID FK "Object ID (Foreign Key)"
+        INT SoftwareSetID FK "Software Set ID (Foreign Key)"
+        INT ReferenceSetID FK "Reference Set ID (Foreign Key)"
+        TEXT Description "Description"
+    }
+
+    %% --- Software Related ---
+    SoftwareSet {
+        INT SoftwareSetID PK "Software Set ID (Primary Key)"
+    }
+    %% SoftwareSet: This table solely defines the existence of a set
+
+    Software {
+        INT SoftwareID PK "Software ID (Primary Key)"
+        TEXT SoftwareName "Software Name"
+        TEXT Version "Version"
+        TEXT Developer "Developer"
+    }
+
+    SoftwareSetMembership {
+        INT SoftwareSetID PK, FK "Software Set ID (Part of Composite PK, FK)"
+        INT SoftwareID PK, FK "Software ID (Part of Composite PK, FK)"
+    }
+    %% SoftwareSetMembership: This table defines which Software belongs to which Set
+
+    %% --- Reference Related ---
+    ReferenceSet {
+        INT ReferenceSetID PK "Reference Set ID (Primary Key)"
+    }
+    %% ReferenceSet: This table solely defines the existence of a set
+
+    Reference {
+        TEXT bibtexkey PK "BibTeX Key (Primary Key)"
+        TEXT Title "Title"
+        TEXT Author "Author"
+        TEXT etc "Other info based on BibTeX"
+    }
+
+    ReferenceSetMembership {
+        INT ReferenceSetID PK, FK "Reference Set ID (Part of Composite PK, FK)"
+        TEXT bibtexkey PK, FK "BibTeX Key (Part of Composite PK, FK)"
+    }
+    %% ReferenceSetMembership: This table defines which Reference belongs to which Set
+
+    %% Relationship Definitions (Crow's Foot Notation)
+    Spacecraft ||--o{ ThermalAnalysisObject : "has"
+    ThermalAnalysisObject ||--o{ ThermalAnalysisEntry : "analyzed in"
+    SoftwareSet ||--o{ ThermalAnalysisEntry : "uses set"
+    ReferenceSet ||--o{ ThermalAnalysisEntry : "uses set"
+    SoftwareSet ||--|{ SoftwareSetMembership : "identifies group for"
+    Software }o--|| SoftwareSetMembership : "is member of"
+    ReferenceSet ||--|{ ReferenceSetMembership : "identifies group for"
+    Reference }o--|| ReferenceSetMembership : "is member of"
