@@ -1,10 +1,12 @@
 # tasindex
 
+TASIndex (Thermal Analysis for Space Index) is a comprehensive database and information system for tracking spacecraft thermal analysis tools and methodologies. This project aims to catalog which software tools were used in the thermal analysis of various spacecraft missions, creating a structured repository of thermal engineering knowledge.
+
 ## Database Design
 
 ### Overview
 
-TASIndex (Thermal Analysis Software Index) uses a relational database to catalog spacecraft thermal analysis information. The database is designed to track which software tools were used to analyze different spacecraft, along with relevant academic references.
+TASIndex uses a relational database to catalog spacecraft thermal analysis information. The database is designed to track which software tools were used to analyze different spacecraft, along with relevant academic references.
 
 ### Entity Relationship Model
 

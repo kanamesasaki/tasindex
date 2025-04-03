@@ -1,0 +1,267 @@
+---
+// src/pages/index.astro
+import Database from "better-sqlite3";
+import path from "path";
+import fs from "fs";
+
+// --- Configuration ---
+const dbRelativePath = "database/spacecraft_thermal.db";
+const dbPath = path.resolve(process.cwd(), dbRelativePath);
+// --- End Configuration ---
+
+// Define the type for database entries
+interface ThermalAnalysisEntry {
+  EntryID: number;
+  Description: string;
+  AnalysisObject: string;
+  SpacecraftName: string;
+  COSPAR_ID: string | null;
+  LaunchYear: number;
+  SoftwareList: string | null;
+  ReferenceKeys: string | null;
+}
+
+let entries: ThermalAnalysisEntry[] = [];
+let errorMessage: string | null = null;
+
+console.log(`Attempting to connect to database at: ${dbPath}`);
+
+try {
+  // ファイル存在確認
+  if (!fs.existsSync(dbPath)) {
+    throw new Error(
+      `Database file not found at specified path: ${dbPath}. Current working directory: ${process.cwd()}`
+    );
+  }
+  const db = new Database(dbPath, { readonly: true });
+  console.log("Database connection successful.");
+
+  const stmt = db.prepare(`
+        SELECT
+            te.EntryID, te.Description, tao.AnalysisObject, sc.SpacecraftName,
+            sc.COSPAR_ID, sc.LaunchYear,
+            GROUP_CONCAT(DISTINCT sw.SoftwareName || COALESCE(' v' || sw.Version, '')) AS SoftwareList,
+            GROUP_CONCAT(DISTINCT r.bibtexkey) AS ReferenceKeys
+        FROM ThermalAnalysisEntry te
+        JOIN ThermalAnalysisObject tao ON te.ObjectID = tao.ObjectID
+        JOIN Spacecraft sc ON tao.SpacecraftID = sc.SpacecraftID
+        LEFT JOIN SoftwareSetMembership ssm ON te.SoftwareSetID = ssm.SoftwareSetID AND te.SoftwareSetID != 0
+        LEFT JOIN Software sw ON ssm.SoftwareID = sw.SoftwareID
+        LEFT JOIN ReferenceSetMembership rsm ON te.ReferenceSetID = rsm.ReferenceSetID AND te.ReferenceSetID != 0
+        LEFT JOIN Reference r ON rsm.bibtexkey = r.bibtexkey
+        GROUP BY te.EntryID, tao.AnalysisObject, sc.SpacecraftName, sc.COSPAR_ID, sc.LaunchYear
+        ORDER BY sc.SpacecraftName, tao.AnalysisObject;
+    `);
+  entries = stmt.all();
+  db.close();
+  console.log(`Successfully fetched ${entries.length} entries from database.`);
+} catch (error) {
+  console.error("Error accessing SQLite database:", error);
+  errorMessage = `Failed to load data: ${error.message}`;
+}
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TASIndex - Spacecraft Thermal Analysis Database</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      h1 {
+        color: #1e40af;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1.5rem;
+      }
+      th,
+      td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      th {
+        background-color: #f9fafb;
+        font-weight: 600;
+      }
+      tr:hover {
+        background-color: #f3f4f6;
+      }
+      .error {
+        color: #dc2626;
+        padding: 1rem;
+        background-color: #fee2e2;
+        border-radius: 0.375rem;
+      }
+
+      /* ソート可能な列見出しのスタイル */
+      th.sortable {
+        cursor: pointer;
+        position: relative;
+        padding-right: 1.5rem;
+      }
+
+      th.sortable::after {
+        content: "↕";
+        position: absolute;
+        right: 0.5rem;
+        color: #9ca3af;
+      }
+
+      th.sortable.sort-asc::after {
+        content: "↑";
+        color: #1e40af;
+      }
+
+      th.sortable.sort-desc::after {
+        content: "↓";
+        color: #1e40af;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>TASIndex: Spacecraft Thermal Analysis Database</h1>
+
+    {errorMessage && <p style="color: red;">{errorMessage}</p>}
+
+    {
+      entries.length > 0 ? (
+        <table id="entriesTable" class="display">
+          <thead>
+            <tr>
+              <th>Spacecraft</th>
+              <th>Object</th>
+              <th>COSPAR ID</th>
+              <th>Launch Year</th>
+              <th>Software Used</th>
+              <th>References (Keys)</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            {entries.map((entry) => (
+              <tr>
+                {/* Spacecraft Nameをリンクにする */}
+                <td>
+                  <a href={`/entry/${entry.EntryID}/`}>
+                    {entry.SpacecraftName}
+                  </a>
+                </td>
+                <td>{entry.AnalysisObject}</td>
+                <td>{entry.COSPAR_ID}</td>
+                <td>{entry.LaunchYear}</td>
+                <td>{entry.SoftwareList?.replaceAll(",", ", ")}</td>
+                <td>{entry.ReferenceKeys?.replaceAll(",", ", ")}</td>
+                <td>{entry.Description}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        !errorMessage && <p>No entries found in the database.</p>
+      )
+    }
+
+    <script>
+      // テーブルソート機能
+      document.addEventListener("DOMContentLoaded", () => {
+        const table = document.getElementById("dataTable");
+        if (!table) return;
+
+        const headers = table.querySelectorAll("th.sortable");
+        let currentSortColumn = null;
+        let currentSortDirection = "asc";
+
+        headers.forEach((header) => {
+          header.addEventListener("click", () => {
+            const column = header.getAttribute("data-column");
+
+            // 同じ列をクリックした場合は並び替え方向を切り替える
+            if (currentSortColumn === column) {
+              currentSortDirection =
+                currentSortDirection === "asc" ? "desc" : "asc";
+            } else {
+              currentSortColumn = column;
+              currentSortDirection = "asc";
+            }
+
+            // 見出しのスタイルをリセット
+            headers.forEach((h) => {
+              h.classList.remove("sort-asc", "sort-desc");
+            });
+
+            // クリックされた見出しに適切なクラスを追加
+            header.classList.add(`sort-${currentSortDirection}`);
+
+            // テーブル行をソート
+            sortTable(table, column, currentSortDirection);
+          });
+        });
+
+        function sortTable(table, column, direction) {
+          const tbody = table.querySelector("tbody");
+          const rows = Array.from(tbody.querySelectorAll("tr"));
+
+          // 行をソート
+          const sortedRows = rows.sort((a, b) => {
+            let aValue, bValue;
+
+            // LaunchYearは数値としてソート
+            if (column === "LaunchYear") {
+              aValue = parseInt(a.cells[2].textContent) || 0;
+              bValue = parseInt(b.cells[2].textContent) || 0;
+            } else {
+              // 対応する列のインデックスを取得
+              const columnIndex = Array.from(headers).findIndex(
+                (h) => h.getAttribute("data-column") === column
+              );
+              aValue = a.cells[columnIndex].textContent.toLowerCase();
+              bValue = b.cells[columnIndex].textContent.toLowerCase();
+            }
+
+            // 比較と方向の適用
+            if (direction === "asc") {
+              return aValue > bValue ? 1 : -1;
+            } else {
+              return aValue < bValue ? 1 : -1;
+            }
+          });
+
+          // ソートされた行をテーブルに再挿入
+          while (tbody.firstChild) {
+            tbody.removeChild(tbody.firstChild);
+          }
+
+          sortedRows.forEach((row) => {
+            tbody.appendChild(row);
+          });
+        }
+
+        // 検索機能
+        const searchInput = document.getElementById("searchInput");
+        if (searchInput) {
+          searchInput.addEventListener("input", () => {
+            const searchText = searchInput.value.toLowerCase();
+            const rows = table.querySelectorAll("tbody tr");
+
+            rows.forEach((row) => {
+              const text = row.textContent.toLowerCase();
+              const visible = text.includes(searchText);
+              row.style.display = visible ? "" : "none";
+            });
+          });
+        }
+      });
+
+      //
+    </script>
+  </body>
+</html>

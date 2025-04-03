@@ -8,6 +8,7 @@
 		// Update the 'dockerFile' property if you aren't using the standard 'Dockerfile' filename.
 		"dockerfile": "../Dockerfile"
 	},
+	"forwardPorts": [4321],
 	"customizations": {
 		"vscode": {
 			"extensions": [
@@ -15,6 +16,7 @@
 				"ms-python.vscode-pylance",
 				"esbenp.prettier-vscode",
 				"dbaeumer.vscode-eslint",
+				"astro-build.astro-vscode",
 				"github.copilot",
 				"github.copilot-chat"
 			]
