@@ -139,6 +139,7 @@ dist
 *.db
 *.sqlite
 *.sqlite3
+!database/spacecraft_thermal.db
 
 # Python関連ファイル
 __pycache__/

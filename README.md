@@ -39,9 +39,6 @@ cd database
 
 # Run the build script
 python3 build_database.py
-
-# Check the row counts to verify correct build
-sqlite3 spacecraft_thermal.db "SELECT 'Spacecraft', count(*) FROM Spacecraft UNION ALL SELECT 'Software', count(*) FROM Software UNION ALL SELECT 'ThermalAnalysisEntry', count(*) FROM ThermalAnalysisEntry;"
 ```
 
 ## Frontend Design
