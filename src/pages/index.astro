@@ -52,12 +52,12 @@ try {
         GROUP BY te.entry_id, tao.analysis_object, sc.spacecraft_name, sc.cospar_id, sc.launch_year
         ORDER BY sc.cospar_id NULLS LAST, sc.spacecraft_name, tao.analysis_object;
     `);
-  entries = stmt.all();
+  entries = stmt.all() as ThermalAnalysisEntry[];
   db.close();
   console.log(`Successfully fetched ${entries.length} entries from database.`);
-} catch (error) {
+} catch (error: unknown) {
   console.error("Error accessing SQLite database:", error);
-  errorMessage = `Failed to load data: ${error.message}`;
+  errorMessage = `Failed to load data: ${error instanceof Error ? error.message : String(error)}`;
 }
 ---
 
@@ -189,7 +189,7 @@ try {
         if (!table) return;
 
         const headers = table.querySelectorAll("th.sortable");
-        let currentSortColumn = null;
+        let currentSortColumn: string | null = null;
         let currentSortDirection = "asc";
 
         headers.forEach((header) => {
@@ -218,8 +218,13 @@ try {
           });
         });
 
-        function sortTable(table, column, direction) {
+        function sortTable(
+          table: HTMLElement,
+          column: string | null,
+          direction: string
+        ) {
           const tbody = table.querySelector("tbody");
+          if (!tbody) return;
           const rows = Array.from(tbody.querySelectorAll("tr"));
 
           // 行をソート
@@ -228,15 +233,15 @@ try {
 
             // launch_yearは数値としてソート
             if (column === "launch_year") {
-              aValue = parseInt(a.cells[3].textContent) || 0;
-              bValue = parseInt(b.cells[3].textContent) || 0;
+              aValue = parseInt(a.cells[3].textContent || "") || 0;
+              bValue = parseInt(b.cells[3].textContent || "") || 0;
             } else {
               // 対応する列のインデックスを取得
               const columnIndex = Array.from(headers).findIndex(
                 (h) => h.getAttribute("data-column") === column
               );
-              aValue = a.cells[columnIndex].textContent.toLowerCase();
-              bValue = b.cells[columnIndex].textContent.toLowerCase();
+              aValue = (a.cells[columnIndex].textContent || "").toLowerCase();
+              bValue = (b.cells[columnIndex].textContent || "").toLowerCase();
             }
 
             // 比較と方向の適用
@@ -258,16 +263,18 @@ try {
         }
 
         // 検索機能
-        const searchInput = document.getElementById("searchInput");
+        const searchInput = document.getElementById(
+          "searchInput"
+        ) as HTMLInputElement;
         if (searchInput) {
           searchInput.addEventListener("input", () => {
             const searchText = searchInput.value.toLowerCase();
             const rows = table.querySelectorAll("tbody tr");
 
             rows.forEach((row) => {
-              const text = row.textContent.toLowerCase();
+              const text = row.textContent?.toLowerCase() || "";
               const visible = text.includes(searchText);
-              row.style.display = visible ? "" : "none";
+              (row as HTMLElement).style.display = visible ? "" : "none";
             });
           });
         }
