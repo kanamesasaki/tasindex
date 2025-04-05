@@ -1,5 +1,12 @@
-COSPAR_ID,Spacecraft_Name,Analysis_Object,Software1,Version1,Software2,Version2,Software3,Version3,Software4,Version4,Software5,Version5,Reference1,Reference2,Reference3,Description
-1989-033B,Magellan,System,SINDA,,TRASYS,,,,,,,,Neumann1993,,,
-1990-037B,HST,System,THERM,,SINDA,,TRASYS,,TSS,,TAL,,Nguyen2006,,,
-1990-090B,Ulysses  ,System,SINDA,,ESATAN,,,,,,,,Bishop2005,,,
-1992-052A,Topex/Poseidon,System,TRASYS,,SINDA,,,,,,,,Antreasian1992,,,
+cospar_id,spacecraft_name,analysis_object,launch_year,software_1,version_1,software_2,version_2,software_3,version_3,software_4,version_4,software_5,version_5,reference_1,reference_2,reference_3,spacecraft_description,thermal_description
+1989-033B,Magellan,System,1989,SINDA,,TRASYS,,,,,,,,Neumann_etal_1993,,,"The Magellan spacecraft was launched by the Space Shuttle Atlantis on May 4, 1989. The spacecraft reached Venus orbit on August 10, 1990, and performed radar mapping and other scientific experiments.","A solar thermal vacuum (STV) test was performed in the on-orbit configuration. The spacecraft overall thermal balance was within about 5°C of predictions in nearly all cases.
+After the first solar exposure during cruise operations, the REMs (Rocket Engine Modules) were observed to be about 20°C above expected values. The SINDA thermal math model was upgraded to increase REM detail and prediction capability within <10°C."
+1990-037B,HST (Hubble),System,1990,THERM,,SINDA,,TRASYS,,TSS,,TAL,,Nguyen_etal_2006,,,,
+1990-090B,Ulysses  ,System,1990,SINDA,,ESATAN,,,,,,,,Bishop_etal_2005,,,,"The Ulysses thermal model was developed in the 1980s as a 400-node SINDA model on a VAX platform, for evaluating steady state solutions.
+Due to the limitations of the VAX system, it was decided to migrate the thermal model to PC-based thermal code, ESATAN."
+1992-052A,Topex/Poseidon,System,1992,TRASYS,,SINDA,,,,,,,,Antreasian_Rosborough_1992,,,"The ocean Topography Experiment/Poseidon Mission (TOPEX/POSEIDON) is a joint project between NASA and CNES, to investigate the seasonal variations of the world's ocean circulations. ","The spacecraft contractor, Fairchild Space Company, has provided spacecraft definitions that consist of both the TRASYS and SINDA models. The TRASYS model consists of 310 surfaces, and the SINDA transient thermal model includes over 500 nodes."
+1994-056A,ETS 6,Deployable reflectors,1994,NEVADA,,SINDA,,,,,,,,Miyasaka_etal_1996,,,,
+1995-065A,SOHO,System,1995,ESATAN,,,,,,,,,,Poinas_Cande_1997,,,,
+1997-061A,Cassini,Cosmic Dust Analyzer (CDA),1997,ESATAN,,,,,,,,,,Troppenz_etal_1996,,,,
+1997-061C,Huygens,System,1997,Thermica,,ESATAN,,,,,,,,Elsner_1993,,,,
+1998-067A,International Space Station,Japanese Experiment Module (JEM),2007,TRASYS,,SINDA,,,,,,,,Wada_Oikawa_2010,,,,

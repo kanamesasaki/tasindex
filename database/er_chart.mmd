@@ -1,71 +1,75 @@
 erDiagram
     %% Entity Definitions
-    Spacecraft {
-        INT SpacecraftID PK "Spacecraft ID (Primary Key)"
-        TEXT COSPAR_ID "COSPAR ID"
-        TEXT NSSDCA_ID "NSSDCA ID"
-        TEXT SpacecraftName "Spacecraft Name"
-        INT LaunchYear "Launch Year"
+    spacecraft {
+        INT spacecraft_id PK "Spacecraft ID (Primary Key)"
+        TEXT cospar_id "COSPAR ID"
+        TEXT spacecraft_name "Spacecraft Name"
+        INT launch_year "Launch Year"
+        TEXT spacecraft_description "Spacecraft Description"
     }
 
-    ThermalAnalysisObject {
-        INT ObjectID PK "Object ID (Primary Key)"
-        INT SpacecraftID FK "Spacecraft ID (Foreign Key)"
-        TEXT AnalysisObject "Analysis Object Name"
+    thermal_analysis_object {
+        INT object_id PK "Object ID (Primary Key)"
+        INT spacecraft_id FK "Spacecraft ID (Foreign Key)"
+        TEXT analysis_object "Analysis Object Name"
     }
 
-    ThermalAnalysisEntry {
-        INT EntryID PK "Entry ID (Primary Key)"
-        INT ObjectID FK "Object ID (Foreign Key)"
-        INT SoftwareSetID FK "Software Set ID (Foreign Key)"
-        INT ReferenceSetID FK "Reference Set ID (Foreign Key)"
-        TEXT Description "Description"
+    thermal_analysis_entry {
+        INT entry_id PK "Entry ID (Primary Key)"
+        INT object_id FK "Object ID (Foreign Key)"
+        INT software_set_id FK "Software Set ID (Foreign Key)"
+        INT reference_set_id FK "Reference Set ID (Foreign Key)"
+        TEXT thermal_description "Thermal Description"
     }
 
     %% --- Software Related ---
-    SoftwareSet {
-        INT SoftwareSetID PK "Software Set ID (Primary Key)"
+    software_set {
+        INT software_set_id PK "Software Set ID (Primary Key)"
     }
-    %% SoftwareSet: This table solely defines the existence of a set
+    %% software_set: This table solely defines the existence of a set
 
-    Software {
-        INT SoftwareID PK "Software ID (Primary Key)"
-        TEXT SoftwareName "Software Name"
-        TEXT Version "Version"
-        TEXT Developer "Developer"
+    software {
+        INT software_id PK "Software ID (Primary Key)"
+        TEXT software_name "Software Name"
+        TEXT software_version "Software Version"
+        TEXT developer "Developer"
     }
 
-    SoftwareSetMembership {
-        INT SoftwareSetID PK, FK "Software Set ID (Part of Composite PK, FK)"
-        INT SoftwareID PK, FK "Software ID (Part of Composite PK, FK)"
+    software_set_membership {
+        INT software_set_id PK, FK "Software Set ID (Part of Composite PK, FK)"
+        INT software_id PK, FK "Software ID (Part of Composite PK, FK)"
     }
-    %% SoftwareSetMembership: This table defines which Software belongs to which Set
+    %% software_set_membership: This table defines which software belongs to which set
 
     %% --- Reference Related ---
-    ReferenceSet {
-        INT ReferenceSetID PK "Reference Set ID (Primary Key)"
+    reference_set {
+        INT reference_set_id PK "Reference Set ID (Primary Key)"
     }
-    %% ReferenceSet: This table solely defines the existence of a set
+    %% reference_set: This table solely defines the existence of a set
 
-    Reference {
-        TEXT bibtexkey PK "BibTeX Key (Primary Key)"
-        TEXT Title "Title"
-        TEXT Author "Author"
-        TEXT etc "Other info based on BibTeX"
+    reference {
+        TEXT bibtex_key PK "BibTeX Key (Primary Key)"
+        TEXT document_type "Document Type"
+        TEXT title "Title"
+        TEXT author "Author"
+        TEXT journal "Journal"
+        TEXT doi "DOI"
+        TEXT book_title "Book Title"
+        INT publication_year "Publication Year"
     }
 
-    ReferenceSetMembership {
-        INT ReferenceSetID PK, FK "Reference Set ID (Part of Composite PK, FK)"
-        TEXT bibtexkey PK, FK "BibTeX Key (Part of Composite PK, FK)"
+    reference_set_membership {
+        INT reference_set_id PK, FK "Reference Set ID (Part of Composite PK, FK)"
+        TEXT bibtex_key PK, FK "BibTeX Key (Part of Composite PK, FK)"
     }
-    %% ReferenceSetMembership: This table defines which Reference belongs to which Set
+    %% reference_set_membership: This table defines which reference belongs to which set
 
     %% Relationship Definitions (Crow's Foot Notation)
-    Spacecraft ||--o{ ThermalAnalysisObject : "has"
-    ThermalAnalysisObject ||--o{ ThermalAnalysisEntry : "analyzed in"
-    SoftwareSet ||--o{ ThermalAnalysisEntry : "uses set"
-    ReferenceSet ||--o{ ThermalAnalysisEntry : "uses set"
-    SoftwareSet ||--|{ SoftwareSetMembership : "identifies group for"
-    Software }o--|| SoftwareSetMembership : "is member of"
-    ReferenceSet ||--|{ ReferenceSetMembership : "identifies group for"
-    Reference }o--|| ReferenceSetMembership : "is member of"
+    spacecraft ||--o{ thermal_analysis_object : "has"
+    thermal_analysis_object ||--o{ thermal_analysis_entry : "analyzed in"
+    software_set ||--o{ thermal_analysis_entry : "uses set"
+    reference_set ||--o{ thermal_analysis_entry : "uses set"
+    software_set ||--|{ software_set_membership : "identifies group for"
+    software }o--|| software_set_membership : "is member of"
+    reference_set ||--|{ reference_set_membership : "identifies group for" 
+    reference }o--|| reference_set_membership : "is member of"

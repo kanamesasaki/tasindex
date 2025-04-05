@@ -9,16 +9,15 @@ const dbRelativePath = "database/spacecraft_thermal.db";
 const dbPath = path.resolve(process.cwd(), dbRelativePath);
 // --- End Configuration ---
 
-// Define the type for database entries
+// Define the type for database entries - スネークケースに更新
 interface ThermalAnalysisEntry {
-  EntryID: number;
-  Description: string;
-  AnalysisObject: string;
-  SpacecraftName: string;
-  COSPAR_ID: string | null;
-  LaunchYear: number;
-  SoftwareList: string | null;
-  ReferenceKeys: string | null;
+  entry_id: number;
+  analysis_object: string;
+  spacecraft_name: string;
+  cospar_id: string | null;
+  launch_year: number;
+  software_list: string | null;
+  reference_keys: string | null;
 }
 
 let entries: ThermalAnalysisEntry[] = [];
@@ -36,21 +35,22 @@ try {
   const db = new Database(dbPath, { readonly: true });
   console.log("Database connection successful.");
 
+  // SQLクエリをスネークケースに更新（thermal_descriptionを削除）
   const stmt = db.prepare(`
         SELECT
-            te.EntryID, te.Description, tao.AnalysisObject, sc.SpacecraftName,
-            sc.COSPAR_ID, sc.LaunchYear,
-            GROUP_CONCAT(DISTINCT sw.SoftwareName || COALESCE(' v' || sw.Version, '')) AS SoftwareList,
-            GROUP_CONCAT(DISTINCT r.bibtexkey) AS ReferenceKeys
-        FROM ThermalAnalysisEntry te
-        JOIN ThermalAnalysisObject tao ON te.ObjectID = tao.ObjectID
-        JOIN Spacecraft sc ON tao.SpacecraftID = sc.SpacecraftID
-        LEFT JOIN SoftwareSetMembership ssm ON te.SoftwareSetID = ssm.SoftwareSetID AND te.SoftwareSetID != 0
-        LEFT JOIN Software sw ON ssm.SoftwareID = sw.SoftwareID
-        LEFT JOIN ReferenceSetMembership rsm ON te.ReferenceSetID = rsm.ReferenceSetID AND te.ReferenceSetID != 0
-        LEFT JOIN Reference r ON rsm.bibtexkey = r.bibtexkey
-        GROUP BY te.EntryID, tao.AnalysisObject, sc.SpacecraftName, sc.COSPAR_ID, sc.LaunchYear
-        ORDER BY sc.SpacecraftName, tao.AnalysisObject;
+            te.entry_id, tao.analysis_object, sc.spacecraft_name,
+            sc.cospar_id, sc.launch_year,
+            GROUP_CONCAT(DISTINCT sw.software_name || COALESCE(' v' || sw.software_version, '')) AS software_list,
+            GROUP_CONCAT(DISTINCT r.bibtex_key) AS reference_keys
+        FROM thermal_analysis_entry te
+        JOIN thermal_analysis_object tao ON te.object_id = tao.object_id
+        JOIN spacecraft sc ON tao.spacecraft_id = sc.spacecraft_id
+        LEFT JOIN software_set_membership ssm ON te.software_set_id = ssm.software_set_id AND te.software_set_id != 0
+        LEFT JOIN software sw ON ssm.software_id = sw.software_id
+        LEFT JOIN reference_set_membership rsm ON te.reference_set_id = rsm.reference_set_id AND te.reference_set_id != 0
+        LEFT JOIN reference r ON rsm.bibtex_key = r.bibtex_key
+        GROUP BY te.entry_id, tao.analysis_object, sc.spacecraft_name, sc.cospar_id, sc.launch_year
+        ORDER BY sc.cospar_id NULLS LAST, sc.spacecraft_name, tao.analysis_object;
     `);
   entries = stmt.all();
   db.close();
@@ -92,75 +92,87 @@ try {
         background-color: #f9fafb;
         font-weight: 600;
       }
-      tr:hover {
-        background-color: #f3f4f6;
-      }
-      .error {
-        color: #dc2626;
-        padding: 1rem;
-        background-color: #fee2e2;
-        border-radius: 0.375rem;
-      }
-
-      /* ソート可能な列見出しのスタイル */
       th.sortable {
         cursor: pointer;
         position: relative;
         padding-right: 1.5rem;
       }
-
       th.sortable::after {
         content: "↕";
         position: absolute;
         right: 0.5rem;
         color: #9ca3af;
       }
-
       th.sortable.sort-asc::after {
         content: "↑";
         color: #1e40af;
       }
-
       th.sortable.sort-desc::after {
         content: "↓";
         color: #1e40af;
+      }
+      tr:hover {
+        background-color: #f3f4f6;
+      }
+      .search-container {
+        margin: 1rem 0;
+      }
+      #searchInput {
+        padding: 0.5rem;
+        width: 300px;
+        border: 1px solid #d1d5db;
+        border-radius: 0.375rem;
       }
     </style>
   </head>
   <body>
     <h1>TASIndex: Spacecraft Thermal Analysis Database</h1>
 
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="Search in table..." />
+    </div>
+
     {errorMessage && <p style="color: red;">{errorMessage}</p>}
 
     {
       entries.length > 0 ? (
-        <table id="entriesTable" class="display">
+        <table id="entriesTable">
           <thead>
             <tr>
-              <th>Spacecraft</th>
-              <th>Object</th>
+              <th class="sortable" data-column="spacecraft_name">
+                Spacecraft
+              </th>
+              <th class="sortable" data-column="analysis_object">
+                Object
+              </th>
               <th>COSPAR ID</th>
-              <th>Launch Year</th>
+              <th class="sortable" data-column="launch_year">
+                Launch Year
+              </th>
               <th>Software Used</th>
-              <th>References (Keys)</th>
-              <th>Description</th>
             </tr>
           </thead>
           <tbody>
             {entries.map((entry) => (
               <tr>
-                {/* Spacecraft Nameをリンクにする */}
                 <td>
-                  <a href={`/entry/${entry.EntryID}/`}>
-                    {entry.SpacecraftName}
+                  {/* この部分を修正し、スラッグベースのURLを生成 */}
+                  <a
+                    href={`/${entry.spacecraft_name
+                      .toLowerCase()
+                      .replace(/[^\w\s-]/g, "")
+                      .replace(/\s+/g, "-")}-${entry.analysis_object
+                      .toLowerCase()
+                      .replace(/[^\w\s-]/g, "")
+                      .replace(/\s+/g, "-")}/`}
+                  >
+                    {entry.spacecraft_name}
                   </a>
                 </td>
-                <td>{entry.AnalysisObject}</td>
-                <td>{entry.COSPAR_ID}</td>
-                <td>{entry.LaunchYear}</td>
-                <td>{entry.SoftwareList?.replaceAll(",", ", ")}</td>
-                <td>{entry.ReferenceKeys?.replaceAll(",", ", ")}</td>
-                <td>{entry.Description}</td>
+                <td>{entry.analysis_object}</td>
+                <td>{entry.cospar_id}</td>
+                <td>{entry.launch_year}</td>
+                <td>{entry.software_list?.replaceAll(",", ", ")}</td>
               </tr>
             ))}
           </tbody>
@@ -173,7 +185,7 @@ try {
     <script>
       // テーブルソート機能
       document.addEventListener("DOMContentLoaded", () => {
-        const table = document.getElementById("dataTable");
+        const table = document.getElementById("entriesTable");
         if (!table) return;
 
         const headers = table.querySelectorAll("th.sortable");
@@ -214,10 +226,10 @@ try {
           const sortedRows = rows.sort((a, b) => {
             let aValue, bValue;
 
-            // LaunchYearは数値としてソート
-            if (column === "LaunchYear") {
-              aValue = parseInt(a.cells[2].textContent) || 0;
-              bValue = parseInt(b.cells[2].textContent) || 0;
+            // launch_yearは数値としてソート
+            if (column === "launch_year") {
+              aValue = parseInt(a.cells[3].textContent) || 0;
+              bValue = parseInt(b.cells[3].textContent) || 0;
             } else {
               // 対応する列のインデックスを取得
               const columnIndex = Array.from(headers).findIndex(
@@ -260,8 +272,6 @@ try {
           });
         }
       });
-
-      //
     </script>
   </body>
 </html>

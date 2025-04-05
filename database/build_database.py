@@ -8,7 +8,7 @@ from bibtexparser.customization import convert_to_unicode
 from collections import defaultdict
 
 # --- Configuration ---
-INPUT_CSV_FILE = 'tasindex_import.txt' # Your input CSV file with bibtex keys
+INPUT_CSV_FILE = 'tasindex_import.csv' # Your input CSV file with bibtex keys
 BIBTEX_FILE = 'references.bib'          # Your BibTeX file <--- NEW
 DB_FILE = 'spacecraft_thermal.db'       # Output SQLite database file
 SCHEMA_FILE = 'schema.sql'              # Database schema definition
@@ -33,8 +33,8 @@ def init_db():
             schema_sql = f.read()
             cursor.executescript(schema_sql)
 
-        print("  Ensuring ReferenceSet ID 0 exists for 'No References'.")
-        cursor.execute("INSERT OR IGNORE INTO ReferenceSet (ReferenceSetID) VALUES (0)")
+        print("  Ensuring reference_set ID 0 exists for 'No References'.")
+        cursor.execute("INSERT OR IGNORE INTO reference_set (reference_set_id) VALUES (0)")
 
         conn.commit()
         print("Database initialized successfully.")
@@ -47,8 +47,8 @@ def init_db():
             conn.close()
 
 def populate_references_from_bibtex(bib_file_path):
-    """Parses a BibTeX file and populates the Reference table."""
-    print(f"Populating References from '{bib_file_path}'...")
+    """Parses a BibTeX file and populates the reference table."""
+    print(f"Populating references from '{bib_file_path}'...")
     if not os.path.exists(bib_file_path):
         print(f"Warning: BibTeX file '{bib_file_path}' not found. Reference details will be empty.")
         return set() # Return empty set if file not found
@@ -75,28 +75,31 @@ def populate_references_from_bibtex(bib_file_path):
                 print(f"  Skipping entry with no ID: {entry}")
                 continue
 
+            # 変更: BibTeXのエントリタイプを document_type として取得
+            document_type = entry.get('ENTRYTYPE', '').lower()  # 小文字に統一
+            
             title = entry.get('title', '')
             author = entry.get('author', '')
+            journal = entry.get('journal', '')
+            doi = entry.get('doi', '')
+            book_title = entry.get('booktitle', '')
             year = entry.get('year', '')
-            # Consolidate journal or booktitle into 'source' for 'etc' column
-            source = entry.get('journal', entry.get('booktitle', ''))
+            
+            try:
+                publication_year = int(year) if year else None
+            except ValueError:
+                print(f"  Warning: Invalid year value '{year}' for entry {bib_key}, setting to NULL")
+                publication_year = None
 
-            # Construct 'etc' string (example: Year and Source)
-            etc_parts = []
-            if year:
-                etc_parts.append(f"Year: {year}")
-            if source:
-                etc_parts.append(f"Source: {source}")
-            etc_text = "; ".join(etc_parts)
-
-            # Use INSERT OR REPLACE to add/update reference details
-            print(f"  Adding/Updating Reference: {bib_key}")
+            # SQL文も更新
+            print(f"  Adding/Updating Reference: {bib_key} (Type: {document_type})")
             cursor.execute(
                 """
-                INSERT OR REPLACE INTO Reference (bibtexkey, Title, Author, etc)
-                VALUES (?, ?, ?, ?)
+                INSERT OR REPLACE INTO reference 
+                (bibtex_key, document_type, title, author, journal, doi, book_title, publication_year)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """,
-                (bib_key, title, author, etc_text)
+                (bib_key, document_type, title, author, journal, doi, book_title, publication_year)
             )
             inserted_keys.add(bib_key)
 
@@ -147,33 +150,44 @@ def process_data(valid_bibtex_keys):
                 entry_count += 1
                 print(f"\nProcessing Row {row_num}: {row.get('Spacecraft_Name', 'N/A')}")
                 try:
-                    # --- 1. Get/Create Spacecraft (Same as before) ---
-                    cospar_id = row.get('COSPAR_ID', '').strip()
-                    sc_name = row.get('Spacecraft_Name', '').strip()
+                    # --- 1. Get/Create Spacecraft ---
+                    cospar_id = row.get('cospar_id', '').strip()
+                    sc_name = row.get('spacecraft_name', '').strip()
+                    spacecraft_description = row.get('spacecraft_description', '').strip()
+
+                    launch_year_str = row.get('launch_year', '').strip()
+                    launch_year = None
+                    if launch_year_str:
+                        try:
+                            launch_year = int(launch_year_str)
+                        except ValueError:
+                            print(f"  Warning: Invalid launch_year value '{launch_year_str}', setting to NULL")
+
                     sc_key = (cospar_id, sc_name)
                     if not sc_name:
                          print(f"  Skipping row {row_num}: Missing Spacecraft Name.")
                          skipped_rows += 1
                          continue
                     if sc_key not in spacecraft_cache:
-                        # ... (insert logic same as before) ...
-                        cursor.execute("INSERT INTO Spacecraft (COSPAR_ID, SpacecraftName) VALUES (?, ?)", sc_key)
+                        cursor.execute(
+                            "INSERT INTO spacecraft (cospar_id, spacecraft_name, launch_year, spacecraft_description) VALUES (?, ?, ?, ?)", 
+                            (cospar_id, sc_name, launch_year, spacecraft_description)
+                        )
                         spacecraft_id = cursor.lastrowid
                         spacecraft_cache[sc_key] = spacecraft_id
-                        print(f"  Creating Spacecraft: {sc_name} ({cospar_id}) -> ID {spacecraft_id}")
+                        print(f"  Creating Spacecraft: {sc_name} ({cospar_id}), launch year: {launch_year or 'N/A'} -> ID {spacecraft_id}")
                     else:
                         spacecraft_id = spacecraft_cache[sc_key]
                         print(f"  Found Spacecraft: ID {spacecraft_id}")
 
 
-                    # --- 2. Get/Create Analysis Object (Same as before) ---
-                    object_name = row.get('Analysis_Object', '').strip()
+                    # --- 2. Get/Create Analysis Object ---
+                    object_name = row.get('analysis_object', '').strip()
                     if not object_name or object_name.lower() == 'system':
                         object_name = "System"
                     obj_key = (spacecraft_id, object_name)
                     if obj_key not in object_cache:
-                        # ... (insert logic same as before) ...
-                        cursor.execute("INSERT INTO ThermalAnalysisObject (SpacecraftID, AnalysisObject) VALUES (?, ?)", obj_key)
+                        cursor.execute("INSERT INTO thermal_analysis_object (spacecraft_id, analysis_object) VALUES (?, ?)", obj_key)
                         object_id = cursor.lastrowid
                         object_cache[obj_key] = object_id
                         print(f"  Creating Object: {object_name} -> ID {object_id}")
@@ -182,19 +196,18 @@ def process_data(valid_bibtex_keys):
                         print(f"  Found Object: ID {object_id}")
 
 
-                    # --- 3. Get/Create Software & Build Software Set (Same as before) ---
+                    # --- 3. Get/Create Software & Build Software Set ---
                     current_software_ids = set()
                     for i in range(1, 6):
-                        sw_name = row.get(f'Software{i}', '').strip()
-                        sw_version = row.get(f'Version{i}', '').strip() or None
+                        sw_name = row.get(f'software_{i}', '').strip()
+                        sw_version = row.get(f'version_{i}', '').strip() or None
                         if sw_name:
-                            # ... (lookup/insert/cache logic same as before) ...
                             print(f"  Processing Software: {sw_name} (Version: {sw_version or 'N/A'})")
                             if sw_name not in software_cache:
-                                cursor.execute("SELECT SoftwareID FROM Software WHERE SoftwareName = ?", (sw_name,))
+                                cursor.execute("SELECT software_id FROM software WHERE software_name = ?", (sw_name,))
                                 existing = cursor.fetchone()
                                 if not existing:
-                                    cursor.execute("INSERT INTO Software (SoftwareName, Version) VALUES (?, ?)",(sw_name, sw_version))
+                                    cursor.execute("INSERT INTO software (software_name, software_version) VALUES (?, ?)", (sw_name, sw_version))
                                     sw_id = cursor.lastrowid
                                     print(f"    Creating Software Entry -> ID {sw_id}")
                                 else:
@@ -208,27 +221,25 @@ def process_data(valid_bibtex_keys):
 
                     frozen_sw_ids = frozenset(current_software_ids)
                     if not frozen_sw_ids:
-                         cursor.execute("INSERT OR IGNORE INTO SoftwareSet (SoftwareSetID) VALUES (0)") # Ensure Set 0 exists
+                         cursor.execute("INSERT OR IGNORE INTO software_set (software_set_id) VALUES (0)") # Ensure Set 0 exists
                          sw_set_id = 0
-                         print(f"  Warning: No software found. Assigning SoftwareSet ID {sw_set_id}.")
+                         print(f"  Warning: No software found. Assigning software_set ID {sw_set_id}.")
                     elif frozen_sw_ids not in software_set_cache:
-                         # ... (insert set and memberships logic same as before) ...
-                        cursor.execute("INSERT INTO SoftwareSet DEFAULT VALUES")
+                        cursor.execute("INSERT INTO software_set DEFAULT VALUES")
                         sw_set_id = cursor.lastrowid
                         software_set_cache[frozen_sw_ids] = sw_set_id
-                        print(f"  Creating new SoftwareSet ID: {sw_set_id} for { {id for id in frozen_sw_ids} }")
+                        print(f"  Creating new software_set ID: {sw_set_id} for { {id for id in frozen_sw_ids} }")
                         for sw_id in frozen_sw_ids:
-                            cursor.execute("INSERT INTO SoftwareSetMembership (SoftwareSetID, SoftwareID) VALUES (?, ?)",(sw_set_id, sw_id))
+                            cursor.execute("INSERT INTO software_set_membership (software_set_id, software_id) VALUES (?, ?)", (sw_set_id, sw_id))
                     else:
                         sw_set_id = software_set_cache[frozen_sw_ids]
-                        print(f"  Found existing SoftwareSet ID: {sw_set_id}")
+                        print(f"  Found existing software_set ID: {sw_set_id}")
 
 
                     # --- 4. Get References & Build Reference Set ---
-                    #    (References themselves are already in DB from BibTeX)
                     current_ref_keys = set()
                     for i in range(1, 4):
-                        ref_key = row.get(f'Reference{i}', '').strip()
+                        ref_key = row.get(f'reference_{i}', '').strip()
                         if ref_key:
                             # Check if the key exists in the set populated from BibTeX
                             if ref_key not in valid_bibtex_keys:
@@ -241,30 +252,29 @@ def process_data(valid_bibtex_keys):
                     frozen_ref_keys = frozenset(current_ref_keys)
                     if not frozen_ref_keys:
                          ref_set_id = 0 # Use pre-defined set for "No References"
-                         print(f"  No valid references found. Assigning ReferenceSet ID {ref_set_id}.")
+                         print(f"  No valid references found. Assigning reference_set ID {ref_set_id}.")
                     elif frozen_ref_keys not in reference_set_cache:
-                         # ... (insert set and memberships logic same as before) ...
-                        cursor.execute("INSERT INTO ReferenceSet DEFAULT VALUES")
+                        cursor.execute("INSERT INTO reference_set DEFAULT VALUES")
                         ref_set_id = cursor.lastrowid
                         reference_set_cache[frozen_ref_keys] = ref_set_id
-                        print(f"  Creating new ReferenceSet ID: {ref_set_id} for {frozen_ref_keys}")
+                        print(f"  Creating new reference_set ID: {ref_set_id} for {frozen_ref_keys}")
                         for key in frozen_ref_keys:
-                            cursor.execute("INSERT INTO ReferenceSetMembership (ReferenceSetID, bibtexkey) VALUES (?, ?)",(ref_set_id, key))
+                            cursor.execute("INSERT INTO reference_set_membership (reference_set_id, bibtex_key) VALUES (?, ?)", (ref_set_id, key))
                     else:
                         ref_set_id = reference_set_cache[frozen_ref_keys]
-                        print(f"  Found existing ReferenceSet ID: {ref_set_id}")
+                        print(f"  Found existing reference_set ID: {ref_set_id}")
 
 
-                    # --- 5. Insert Thermal Analysis Entry (Same as before) ---
-                    description = row.get('Description', '').strip()
-                    print(f"  Creating ThermalAnalysisEntry linking Obj:{object_id}, SWSet:{sw_set_id}, RefSet:{ref_set_id}")
+                    # --- 5. Insert Thermal Analysis Entry ---
+                    thermal_description = row.get('thermal_description', '').strip()
+                    print(f"  Creating thermal_analysis_entry linking Obj:{object_id}, SWSet:{sw_set_id}, RefSet:{ref_set_id}")
                     cursor.execute(
                         """
-                        INSERT INTO ThermalAnalysisEntry
-                        (ObjectID, SoftwareSetID, ReferenceSetID, Description)
+                        INSERT INTO thermal_analysis_entry
+                        (object_id, software_set_id, reference_set_id, thermal_description)
                         VALUES (?, ?, ?, ?)
                         """,
-                        (object_id, sw_set_id, ref_set_id, description)
+                        (object_id, sw_set_id, ref_set_id, thermal_description)
                     )
 
                 except Exception as e:

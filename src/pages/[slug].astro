@@ -1,0 +1,444 @@
+---
+// src/pages/[slug].astro
+import Database from "better-sqlite3";
+import path from "path";
+import fs from "fs";
+// Astroの型定義を使う場合（必須ではない）
+// import type { GetStaticPaths } from 'astro';
+
+// --- Database Path (index.astroと同様) ---
+const dbRelativePath = "database/spacecraft_thermal.db"; // プロジェクトルートからの相対パス
+const dbPath = path.resolve(process.cwd(), dbRelativePath);
+
+// --- getStaticPaths: Astroにどのページを生成するか教える ---
+export async function getStaticPaths() {
+  const dbRelativePath = "database/spacecraft_thermal.db"; // プロジェクトルートからの相対パス
+  const dbPath = path.resolve(process.cwd(), dbRelativePath);
+  console.log("[getStaticPaths] Starting to determine paths...");
+  console.log(`[getStaticPaths] Database path: ${dbPath}`);
+
+  if (!fs.existsSync(dbPath)) {
+    console.error(
+      `[getStaticPaths] Database file not found at ${dbPath}. Cannot generate entry pages.`
+    );
+    return []; // エラー時は空配列を返し、ページを生成しない
+  }
+
+  let allEntries = [];
+  try {
+    const db = new Database(dbPath, { readonly: true });
+    // エントリーとその組み合わせ情報を取得
+    const stmt = db.prepare(`
+      SELECT 
+        te.entry_id, 
+        sc.spacecraft_name, 
+        tao.analysis_object
+      FROM thermal_analysis_entry te
+      JOIN thermal_analysis_object tao ON te.object_id = tao.object_id
+      JOIN spacecraft sc ON tao.spacecraft_id = sc.spacecraft_id
+    `);
+    allEntries = stmt.all();
+    db.close();
+    console.log(`[getStaticPaths] Found ${allEntries.length} entries.`);
+  } catch (error) {
+    console.error(`[getStaticPaths] Error fetching entries: ${error}`);
+    return [];
+  }
+
+  // URLスラッグを生成してAstroが要求する形式に変換
+  return allEntries.map((entry) => {
+    // スペースをハイフンに変換し、特殊文字を削除して小文字化
+    const spacecraftSlug = entry.spacecraft_name
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/\s+/g, "-");
+
+    const objectSlug = entry.analysis_object
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/\s+/g, "-");
+
+    const combinedSlug = `${spacecraftSlug}-${objectSlug}`;
+
+    return {
+      params: { slug: combinedSlug }, // ここを entryId から slug に変更
+      props: {
+        originalEntryId: entry.entry_id,
+        spacecraftName: entry.spacecraft_name,
+        analysisObject: entry.analysis_object,
+      },
+    };
+  });
+}
+
+// --- ここからは個々のページ生成時に実行される ---
+const { slug } = Astro.params; // URL用スラッグ - entryId から slug に変更
+const { originalEntryId, spacecraftName, analysisObject } = Astro.props; // getStaticPathsから渡されたデータ
+console.log(
+  `[Page Generation] Rendering page for: ${spacecraftName} - ${analysisObject} (DB ID: ${originalEntryId})`
+);
+
+let entryDetails = null;
+let softwareUsed = [];
+let referencesCited = [];
+let errorMessage = null;
+
+if (!fs.existsSync(dbPath)) {
+  errorMessage = `Database file not found at ${dbPath}.`;
+  Astro.response.status = 500; // サーバーエラー扱いが良いかも
+} else {
+  try {
+    const db = new Database(dbPath, { readonly: true });
+
+    // --- Query 1: 基本情報取得 - スネークケースに更新 ---
+    const entryStmt = db.prepare(`
+            SELECT
+                te.entry_id, te.thermal_description, te.software_set_id, te.reference_set_id,
+                tao.analysis_object,
+                sc.spacecraft_name, sc.cospar_id, sc.launch_year, sc.spacecraft_description
+            FROM thermal_analysis_entry te
+            JOIN thermal_analysis_object tao ON te.object_id = tao.object_id
+            JOIN spacecraft sc ON tao.spacecraft_id = sc.spacecraft_id
+            WHERE te.entry_id = ?
+        `);
+    entryDetails = entryStmt.get(originalEntryId); // 数値のentry_idを使用
+
+    if (entryDetails) {
+      console.log(
+        `  Found details for Entry ${slug}: ${entryDetails.spacecraft_name}`
+      );
+      // --- Query 2: ソフトウェア情報取得 - スネークケースに更新 ---
+      if (entryDetails.software_set_id !== 0) {
+        const swStmt = db.prepare(`
+                    SELECT sw.software_name, sw.software_version, sw.developer
+                    FROM software_set_membership ssm
+                    JOIN software sw ON ssm.software_id = sw.software_id
+                    WHERE ssm.software_set_id = ?
+                    ORDER BY sw.software_name
+                `);
+        softwareUsed = swStmt.all(entryDetails.software_set_id);
+        console.log(`    Found ${softwareUsed.length} software entries.`);
+      } else {
+        console.log(`    software_set_id is 0, skipping software fetch.`);
+      }
+
+      // --- Query 3: 参照情報取得 - document_typeも取得 ---
+      if (entryDetails.reference_set_id !== 0) {
+        const refStmt = db.prepare(`
+                    SELECT r.bibtex_key, r.document_type, r.title, r.author, r.journal, r.doi, r.book_title, r.publication_year
+                    FROM reference_set_membership rsm
+                    JOIN reference r ON rsm.bibtex_key = r.bibtex_key
+                    WHERE rsm.reference_set_id = ?
+                    ORDER BY r.bibtex_key
+                `);
+        referencesCited = refStmt.all(entryDetails.reference_set_id);
+        console.log(`    Found ${referencesCited.length} reference entries.`);
+      } else {
+        console.log(`    reference_set_id is 0, skipping reference fetch.`);
+      }
+    } else {
+      errorMessage = `Entry with ID ${entryId} not found in the database.`;
+      console.warn(`  Entry ID ${entryId} not found!`);
+      Astro.response.status = 404; // Not Found ステータスを設定
+    }
+    db.close();
+  } catch (error) {
+    console.error(`Error fetching details for Entry ID ${entryId}:`, error);
+    errorMessage = `Error loading details: ${error.message}`;
+    Astro.response.status = 500; // Internal Server Error ステータスを設定
+  }
+}
+---
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>
+      Entry Details: {
+        entryDetails
+          ? `${entryDetails.spacecraft_name} - ${entryDetails.analysis_object}`
+          : `Entry ${entryId}`
+      }
+    </title>
+    <style>
+      /* 基本的なスタイル */
+      body {
+        font-family: sans-serif;
+        line-height: 1.6;
+        padding: 1em;
+        max-width: 800px;
+        margin: auto;
+      }
+      h1,
+      h2 {
+        border-bottom: 1px solid #eee;
+        padding-bottom: 0.3em;
+        margin-top: 1.5em;
+      }
+      dl {
+        margin-left: 1em;
+      }
+      dt {
+        font-weight: bold;
+        margin-top: 0.8em;
+        color: #333;
+      }
+      dd {
+        margin-left: 1em;
+        margin-bottom: 0.5em;
+        color: #555;
+      }
+      ul {
+        list-style: none;
+        padding-left: 0;
+      }
+      li {
+        background-color: #f9f9f9;
+        border: 1px solid #eee;
+        padding: 0.8em;
+        margin-bottom: 0.5em;
+        border-radius: 4px;
+      }
+      li strong {
+        color: #005a9c;
+      }
+      .error {
+        color: red;
+        border: 1px solid red;
+        padding: 1em;
+        background-color: #ffeeee;
+      }
+      .back-link {
+        margin-bottom: 1.5em;
+        display: inline-block;
+        color: #005a9c;
+        text-decoration: none;
+        border: 1px solid #ccc;
+        padding: 0.5em 1em;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+      }
+      .back-link:hover {
+        background-color: #f0f0f0;
+      }
+      .not-found {
+        color: #777;
+      }
+      .description {
+        white-space: pre-line;
+        background-color: #f9f9f9;
+        padding: 1em;
+        border-radius: 4px;
+        border: 1px solid #eee;
+      }
+      /* 文書タイプのスタイリング */
+      .doc-type {
+        font-size: 0.8em;
+        color: #666;
+        margin-left: 0.5em;
+        padding: 0.1em 0.4em;
+        background-color: #f0f0f0;
+        border-radius: 3px;
+      }
+      .doc-type.article {
+        background-color: #e6f7ff;
+        border-left: 3px solid #1890ff;
+      }
+      .doc-type.inproceedings {
+        background-color: #f6ffed;
+        border-left: 3px solid #52c41a;
+      }
+      .doc-type.book {
+        background-color: #fff7e6;
+        border-left: 3px solid #fa8c16;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="/" class="back-link">&laquo; Back to Index</a>
+
+    {/* エラーメッセージ表示 */}
+    {errorMessage && <p class="error">{errorMessage}</p>}
+
+    {/* エントリが見つかった場合 */}
+    {
+      entryDetails && !errorMessage && (
+        <>
+          <h1>
+            {entryDetails.analysis_object == "System"
+              ? entryDetails.spacecraft_name
+              : `${entryDetails.spacecraft_name}, ${entryDetails.analysis_object}`}
+          </h1>
+          <dl>
+            <>
+              <dt>Spacecraft Name</dt>
+              <dd>{entryDetails.spacecraft_name || "N/A"}</dd>
+            </>
+            <>
+              <dt>COSPAR ID</dt>
+              <dd>{entryDetails.cospar_id || "N/A"}</dd>
+            </>
+            <>
+              <dt>Launch Year</dt>
+              <dd>{entryDetails.launch_year || "N/A"}</dd>
+            </>
+            <>
+              <dt>Spacecraft Description</dt>
+              <dd>{entryDetails.spacecraft_description || "N/A"}</dd>
+            </>
+          </dl>
+
+          <h2>Thermal Analysis</h2>
+          <dl>
+            <>
+              <dt>Analysis Object</dt>
+              <dd>{entryDetails.analysis_object}</dd>
+            </>
+            <>
+              <dt>Analysis Description</dt>
+              <dd>{entryDetails.analysis_description || "N/A"}</dd>
+            </>
+            <>
+              <dt>Software Used</dt>
+              {softwareUsed.length > 0 ? (
+                <ul>
+                  {softwareUsed.map((sw) => (
+                    <li>
+                      <strong>{sw.software_name}</strong>
+                      {sw.software_version
+                        ? ` (Version: ${sw.software_version})`
+                        : ""}
+                      {sw.developer ? ` [Developer: ${sw.developer}]` : ""}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>
+                  None specified (Software Set ID:{" "}
+                  {entryDetails.software_set_id}
+                  ).
+                </p>
+              )}
+            </>
+          </dl>
+
+          <h2>References</h2>
+          {referencesCited.length > 0 ? (
+            <ul>
+              {referencesCited.map((ref) => (
+                <li>
+                  <strong>
+                    {(() => {
+                      // 特殊パターンを処理
+                      if (ref.bibtex_key.includes("_etal_")) {
+                        // "Author_etal_Year" → "Author et al. (Year)"
+                        return ref.bibtex_key.replace(
+                          /([A-Za-z]+)_etal_(\d{4})/,
+                          "$1 et al. ($2)"
+                        );
+                      } else if (ref.bibtex_key.includes("_")) {
+                        // "Author1_Author2_Year" → "Author1 & Author2 (Year)"
+                        return ref.bibtex_key.replace(
+                          /([A-Za-z]+)_([A-Za-z]+)_(\d{4})/,
+                          "$1 & $2 ($3)"
+                        );
+                      } else {
+                        // 基本的な "AuthorYear" → "Author (Year)" パターン
+                        return ref.bibtex_key.replace(
+                          /([A-Za-z]+)(\d{4})/,
+                          "$1 ($2)"
+                        );
+                      }
+                    })()}
+                  </strong>
+                  <br />
+                  {/* 文書タイプに応じて異なる引用フォーマットを適用 */}
+                  {(() => {
+                    if (ref.document_type === "article") {
+                      // 学術論文フォーマット
+                      return (
+                        <span>
+                          {ref.author ? `${ref.author}, ` : ""}
+                          {ref.title ? `"${ref.title}", ` : ""}
+                          {ref.journal ? `${ref.journal}, ` : ""}
+                          {ref.publication_year
+                            ? `${ref.publication_year}`
+                            : ""}
+                          {ref.doi ? `, DOI:` : ""}
+                          {ref.doi && (
+                            <a
+                              href={
+                                ref.doi.startsWith("http")
+                                  ? ref.doi
+                                  : `https://doi.org/${ref.doi}`
+                              }
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {ref.doi}
+                            </a>
+                          )}
+                        </span>
+                      );
+                    } else if (ref.document_type === "inproceedings") {
+                      // 会議論文フォーマット
+                      return (
+                        <span>
+                          {ref.author ? `${ref.author}, ` : ""}
+                          {ref.title ? `"${ref.title}", ` : ""}
+                          {ref.book_title ? `${ref.book_title}, ` : ""}
+                          {ref.publication_year
+                            ? `${ref.publication_year}.`
+                            : ""}
+                          {ref.doi && (
+                            <a
+                              href={
+                                ref.doi.startsWith("http")
+                                  ? ref.doi
+                                  : `https://doi.org/${ref.doi}`
+                              }
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {ref.doi}
+                            </a>
+                          )}
+                        </span>
+                      );
+                    } else {
+                      // その他のタイプの基本フォーマット
+                      return (
+                        <span>
+                          {ref.author ? `${ref.author}, ` : ""}
+                          {ref.title ? `"${ref.title}", ` : ""}
+                          {ref.publication_year
+                            ? `${ref.publication_year}`
+                            : ""}
+                        </span>
+                      );
+                    }
+                  })()}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>
+              None specified (Reference Set ID: {entryDetails.reference_set_id}
+              ).
+            </p>
+          )}
+        </>
+      )
+    }
+
+    {/* エントリが見つからなかった場合のメッセージ (404時など) */}
+    {
+      !entryDetails && !errorMessage && (
+        <p class="not-found">The requested entry could not be found.</p>
+      )
+    }
+  </body>
+</html>
