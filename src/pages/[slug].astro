@@ -93,7 +93,6 @@ type EntryDetails = {
   cospar_id?: string;
   launch_year?: number;
   spacecraft_description?: string;
-  analysis_description?: string;
 };
 // Define type for software data
 type Software = {
@@ -336,7 +335,7 @@ if (!fs.existsSync(dbPath)) {
             </>
             <>
               <dt>Analysis Description</dt>
-              <dd>{entryDetails.analysis_description || "N/A"}</dd>
+              <dd>{entryDetails.thermal_description || "N/A"}</dd>
             </>
             <>
               <dt>Software Used</dt>
@@ -376,16 +375,18 @@ if (!fs.existsSync(dbPath)) {
                           /([A-Za-z]+)_etal_(\d{4})/,
                           "$1 et al. ($2)"
                         );
-                      } else if (ref.bibtex_key.includes("_")) {
+                      } else if (
+                        (ref.bibtex_key.match(/_/g) || []).length === 2
+                      ) {
                         // "Author1_Author2_Year" → "Author1 & Author2 (Year)"
                         return ref.bibtex_key.replace(
                           /([A-Za-z]+)_([A-Za-z]+)_(\d{4})/,
                           "$1 & $2 ($3)"
                         );
                       } else {
-                        // 基本的な "AuthorYear" → "Author (Year)" パターン
+                        // 基本的な "Author_Year" → "Author (Year)" パターン
                         return ref.bibtex_key.replace(
-                          /([A-Za-z]+)(\d{4})/,
+                          /([A-Za-z]+)_(\d{4})/,
                           "$1 ($2)"
                         );
                       }
