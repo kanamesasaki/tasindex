@@ -12,7 +12,7 @@ TASIndex uses a relational database to catalog spacecraft thermal analysis infor
 
 The database follows a structured entity-relationship model as visualized in the ER diagram. The core entities include:
 
-- `Spacecraft`: Basic information about space vehicles including COSPAR ID, NSSDCA ID, name, and launch date
+- `Spacecraft`: Basic information about space vehicles including COSPAR ID, name, and launch date
 - `ThermalAnalysisObject`: Components or systems being analyzed (often the whole spacecraft), associated with a specific spacecraft
 - `Software`: Thermal analysis tools used in the studies, with details on version and features
 - `Reference`: Academic papers and documents referenced, stored with BibTeX metadata

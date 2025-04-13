@@ -135,6 +135,15 @@ try {
         max-width: 1200px;
         margin: 0 auto;
       }
+      .header-container {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 0rem;
+      }
+      .header-logo {
+        height: 40px;
+        width: auto;
+      }
       h1 {
         color: #1e40af;
         margin-top: 0;
@@ -188,7 +197,10 @@ try {
     </style>
   </head>
   <body>
-    <h1>TASIndex: Spacecraft Thermal Analysis Database</h1>
+    <div class="header-container">
+      <img src="/logo.svg" alt="TASIndex Logo" class="header-logo" />
+      <h1>TASIndex: Spacecraft Thermal Analysis Database</h1>
+    </div>
 
     <div class="search-container">
       <input type="text" id="searchInput" placeholder="Search in table..." />
