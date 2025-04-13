@@ -5,6 +5,7 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
     output: 'static',  // 静的サイト生成を使用
     outDir: './dist',  // 出力先ディレクトリを指定
+    site: 'https://tasindex.thermocraft.space',
     build: {
     }
   });
