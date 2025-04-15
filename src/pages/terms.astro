@@ -1,0 +1,153 @@
+---
+// src/pages/terms.astro
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Terms & Conditions - TASIndex</title>
+    <meta
+      name="description"
+      content="Terms and conditions for using the TASIndex platform."
+    />
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        padding: 2rem;
+        max-width: 800px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+      .header-container {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+      .header-logo {
+        height: 40px;
+        width: auto;
+      }
+      h1 {
+        color: #1e40af;
+        margin-top: 0;
+      }
+      .back-link {
+        margin-bottom: 1.5rem;
+        display: inline-block;
+        color: #1e40af;
+        text-decoration: none;
+      }
+      .back-link:hover {
+        text-decoration: underline;
+      }
+      .terms-section {
+        margin-bottom: 2.5rem;
+        background-color: #f9fafb;
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+        border: 1px solid #e5e7eb;
+      }
+      .terms-section h2 {
+        color: #1e40af;
+        font-size: 1.5rem;
+        margin-top: 0;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      .terms-section p {
+        margin-bottom: 1rem;
+      }
+      /* フッタースタイル */
+      .footer {
+        margin-top: 3rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e5e7eb;
+      }
+      .footer-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .footer-links {
+        display: flex;
+        gap: 1.5rem;
+      }
+      .footer-links a {
+        color: #4b5563;
+        text-decoration: none;
+      }
+      .footer-links a:hover {
+        color: #1e40af;
+        text-decoration: underline;
+      }
+      /* レスポンシブデザイン */
+      @media (min-width: 640px) {
+        .footer-container {
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a href="/" class="back-link">&laquo; Back to Index</a>
+
+    <div class="header-container">
+      <img src="/logo.svg" alt="TASIndex Logo" class="header-logo" />
+      <h1>Terms & Conditions</h1>
+    </div>
+
+    <section class="terms-section">
+      <h2>Terms of Use</h2>
+      <p>
+        By accessing and using this application, you accept and agree to be
+        bound by the terms and conditions of this agreement. If you do not agree
+        to these terms, you should not use this application.
+      </p>
+    </section>
+
+    <section class="terms-section">
+      <h2>Privacy Policy</h2>
+      <p>
+        Our service uses Google Analytics to collect anonymous usage data only
+        after you consent through the cookie banner. This analytics service
+        helps us understand how users interact with our application so we can
+        improve it.
+      </p>
+      <p>
+        We collect no personal information unless explicitly provided by you
+        through our Contact form / email. Any personal information you provide
+        is used solely for the purpose of responding to your inquiry and will
+        never be shared with third parties without your explicit consent.
+      </p>
+    </section>
+
+    <section class="terms-section">
+      <h2>Limitation of Liability</h2>
+      <p>
+        In no event shall the developer be liable for any claim, damages or
+        other liability arising from the use of this software or the information
+        it provides.
+      </p>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-links">
+          <a
+            href="https://thermocraft.space/"
+            target="_blank"
+            rel="noopener noreferrer">© 2025 K. Sasaki</a
+          > |
+          <a href="/contact">Contact</a> |
+          <a href="/terms">Terms & Conditions</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

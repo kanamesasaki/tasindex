@@ -193,7 +193,7 @@ if (!fs.existsSync(dbPath)) {
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
     <title>
-      Entry Details: {
+      {
         entryDetails
           ? `${entryDetails.spacecraft_name} - ${entryDetails.analysis_object}`
           : `Entry ${originalEntryId}`
@@ -323,7 +323,9 @@ if (!fs.existsSync(dbPath)) {
             </>
             <>
               <dt>Spacecraft Description</dt>
-              <dd>{entryDetails.spacecraft_description || "N/A"}</dd>
+              <dd class="description">
+                {entryDetails.spacecraft_description || "N/A"}
+              </dd>
             </>
           </dl>
 
@@ -335,29 +337,32 @@ if (!fs.existsSync(dbPath)) {
             </>
             <>
               <dt>Analysis Description</dt>
-              <dd>{entryDetails.thermal_description || "N/A"}</dd>
+              <dd class="description">
+                {entryDetails.thermal_description || "N/A"}
+              </dd>
             </>
             <>
               <dt>Software Used</dt>
-              {softwareUsed.length > 0 ? (
-                <ul>
-                  {softwareUsed.map((sw) => (
-                    <li>
-                      <strong>{sw.software_name}</strong>
-                      {sw.software_version
-                        ? ` (Version: ${sw.software_version})`
-                        : ""}
-                      {sw.developer ? ` [Developer: ${sw.developer}]` : ""}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>
-                  None specified (Software Set ID:{" "}
-                  {entryDetails.software_set_id}
-                  ).
-                </p>
-              )}
+              <dd>
+                {softwareUsed.length > 0 ? (
+                  <ul>
+                    {softwareUsed.map((sw) => (
+                      <li>
+                        <strong>{sw.software_name}</strong>
+                        {sw.software_version
+                          ? ` (Version: ${sw.software_version})`
+                          : ""}
+                        {sw.developer ? ` [Developer: ${sw.developer}]` : ""}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>
+                    None specified (Software Set ID:{" "}
+                    {entryDetails.software_set_id}).
+                  </p>
+                )}
+              </dd>
             </>
           </dl>
 
@@ -384,7 +389,7 @@ if (!fs.existsSync(dbPath)) {
                           "$1 & $2 ($3)"
                         );
                       } else {
-                        // 基本的な "Author_Year" → "Author (Year)" パターン
+                        // "Author_Year" → "Author (Year)"
                         return ref.bibtex_key.replace(
                           /([A-Za-z]+)_(\d{4})/,
                           "$1 ($2)"
@@ -396,7 +401,7 @@ if (!fs.existsSync(dbPath)) {
                   {/* 文書タイプに応じて異なる引用フォーマットを適用 */}
                   {(() => {
                     if (ref.document_type === "article") {
-                      // 学術論文フォーマット
+                      // formatting for article
                       return (
                         <span>
                           {ref.author ? `${ref.author}, ` : ""}
@@ -422,7 +427,7 @@ if (!fs.existsSync(dbPath)) {
                         </span>
                       );
                     } else if (ref.document_type === "inproceedings") {
-                      // 会議論文フォーマット
+                      // formatting for inproceedings
                       return (
                         <span>
                           {ref.author ? `${ref.author}, ` : ""}
