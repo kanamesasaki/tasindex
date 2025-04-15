@@ -15,7 +15,7 @@ interface ThermalAnalysisEntry {
   analysis_object: string;
   spacecraft_name: string;
   cospar_id: string | null;
-  launch_year: number;
+  launch_date: string | null;
   software_list: string | null;
   reference_keys: string | null;
 }
@@ -39,7 +39,7 @@ try {
   const stmt = db.prepare(`
         SELECT
             te.entry_id, tao.analysis_object, sc.spacecraft_name,
-            sc.cospar_id, sc.launch_year,
+            sc.cospar_id, sc.launch_date,
             GROUP_CONCAT(DISTINCT sw.software_name || COALESCE(' v' || sw.software_version, '')) AS software_list,
             GROUP_CONCAT(DISTINCT r.bibtex_key) AS reference_keys
         FROM thermal_analysis_entry te
@@ -49,7 +49,7 @@ try {
         LEFT JOIN software sw ON ssm.software_id = sw.software_id
         LEFT JOIN reference_set_membership rsm ON te.reference_set_id = rsm.reference_set_id AND te.reference_set_id != 0
         LEFT JOIN reference r ON rsm.bibtex_key = r.bibtex_key
-        GROUP BY te.entry_id, tao.analysis_object, sc.spacecraft_name, sc.cospar_id, sc.launch_year
+        GROUP BY te.entry_id, tao.analysis_object, sc.spacecraft_name, sc.cospar_id, sc.launch_date
         ORDER BY sc.cospar_id NULLS LAST, sc.spacecraft_name, tao.analysis_object;
     `);
   entries = stmt.all() as ThermalAnalysisEntry[];
@@ -264,8 +264,8 @@ try {
                 Object
               </th>
               <th>COSPAR ID</th>
-              <th class="sortable" data-column="launch_year">
-                Launch Year
+              <th class="sortable" data-column="launch_date">
+                Launch Date
               </th>
               <th>Software Used</th>
             </tr>
@@ -289,7 +289,13 @@ try {
                 </td>
                 <td>{entry.analysis_object}</td>
                 <td>{entry.cospar_id}</td>
-                <td>{entry.launch_year}</td>
+                <td>
+                  {/* YYYY-MM-DD形式のみ表示、それ以外は空欄にする */}
+                  {entry.launch_date &&
+                  /^\d{4}-\d{2}-\d{2}$/.test(entry.launch_date)
+                    ? entry.launch_date
+                    : ""}
+                </td>
                 <td>{entry.software_list?.replaceAll(",", ", ")}</td>
               </tr>
             ))}
@@ -349,8 +355,8 @@ try {
           const sortedRows = rows.sort((a, b) => {
             let aValue, bValue;
 
-            // launch_yearは数値としてソート
-            if (column === "launch_year") {
+            // launch_dateは数値としてソート
+            if (column === "launch_date") {
               aValue = parseInt(a.cells[3].textContent || "") || 0;
               bValue = parseInt(b.cells[3].textContent || "") || 0;
             } else {

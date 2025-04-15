@@ -155,13 +155,7 @@ def process_data(valid_bibtex_keys):
                     sc_name = row.get('spacecraft_name', '').strip()
                     spacecraft_description = row.get('spacecraft_description', '').strip()
 
-                    launch_year_str = row.get('launch_year', '').strip()
-                    launch_year = None
-                    if launch_year_str:
-                        try:
-                            launch_year = int(launch_year_str)
-                        except ValueError:
-                            print(f"  Warning: Invalid launch_year value '{launch_year_str}', setting to NULL")
+                    launch_date = row.get('launch_date', '').strip() or None
 
                     sc_key = (cospar_id, sc_name)
                     if not sc_name:
@@ -170,12 +164,12 @@ def process_data(valid_bibtex_keys):
                          continue
                     if sc_key not in spacecraft_cache:
                         cursor.execute(
-                            "INSERT INTO spacecraft (cospar_id, spacecraft_name, launch_year, spacecraft_description) VALUES (?, ?, ?, ?)", 
-                            (cospar_id, sc_name, launch_year, spacecraft_description)
+                            "INSERT INTO spacecraft (cospar_id, spacecraft_name, launch_date, spacecraft_description) VALUES (?, ?, ?, ?)", 
+                            (cospar_id, sc_name, launch_date, spacecraft_description)
                         )
                         spacecraft_id = cursor.lastrowid
                         spacecraft_cache[sc_key] = spacecraft_id
-                        print(f"  Creating Spacecraft: {sc_name} ({cospar_id}), launch year: {launch_year or 'N/A'} -> ID {spacecraft_id}")
+                        print(f"  Creating Spacecraft: {sc_name} ({cospar_id}), launch date: {launch_date or 'N/A'} -> ID {spacecraft_id}")
                     else:
                         spacecraft_id = spacecraft_cache[sc_key]
                         print(f"  Found Spacecraft: ID {spacecraft_id}")

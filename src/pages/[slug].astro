@@ -91,7 +91,7 @@ type EntryDetails = {
   analysis_object: string;
   spacecraft_name: string;
   cospar_id?: string;
-  launch_year?: number;
+  launch_date?: string;
   spacecraft_description?: string;
 };
 // Define type for software data
@@ -129,7 +129,7 @@ if (!fs.existsSync(dbPath)) {
             SELECT
                 te.entry_id, te.thermal_description, te.software_set_id, te.reference_set_id,
                 tao.analysis_object,
-                sc.spacecraft_name, sc.cospar_id, sc.launch_year, sc.spacecraft_description
+                sc.spacecraft_name, sc.cospar_id, sc.launch_date, sc.spacecraft_description
             FROM thermal_analysis_entry te
             JOIN thermal_analysis_object tao ON te.object_id = tao.object_id
             JOIN spacecraft sc ON tao.spacecraft_id = sc.spacecraft_id
@@ -318,8 +318,8 @@ if (!fs.existsSync(dbPath)) {
               <dd>{entryDetails.cospar_id || "N/A"}</dd>
             </>
             <>
-              <dt>Launch Year</dt>
-              <dd>{entryDetails.launch_year || "N/A"}</dd>
+              <dt>Launch Date</dt>
+              <dd>{entryDetails.launch_date || "N/A"}</dd>
             </>
             <>
               <dt>Spacecraft Description</dt>

@@ -9,7 +9,7 @@ CREATE TABLE spacecraft (
     spacecraft_id INTEGER PRIMARY KEY,
     cospar_id TEXT,
     spacecraft_name TEXT NOT NULL,
-    launch_year INTEGER,
+    launch_date TEXT,
     spacecraft_description TEXT
 );
 
