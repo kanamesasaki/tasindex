@@ -377,22 +377,22 @@ if (!fs.existsSync(dbPath)) {
                       if (ref.bibtex_key.includes("_etal_")) {
                         // "Author_etal_Year" → "Author et al. (Year)"
                         return ref.bibtex_key.replace(
-                          /([A-Za-z]+)_etal_(\d{4})/,
-                          "$1 et al. ($2)"
+                          /([A-Za-z]+)_etal_(\d{4})([a-z]?)/,
+                          "$1 et al. ($2$3)"
                         );
                       } else if (
                         (ref.bibtex_key.match(/_/g) || []).length === 2
                       ) {
                         // "Author1_Author2_Year" → "Author1 & Author2 (Year)"
                         return ref.bibtex_key.replace(
-                          /([A-Za-z]+)_([A-Za-z]+)_(\d{4})/,
-                          "$1 & $2 ($3)"
+                          /([A-Za-z]+)_([A-Za-z]+)_(\d{4})([a-z]?)/,
+                          "$1 & $2 ($3$4)"
                         );
                       } else {
                         // "Author_Year" → "Author (Year)"
                         return ref.bibtex_key.replace(
-                          /([A-Za-z]+)_(\d{4})/,
-                          "$1 ($2)"
+                          /([A-Za-z]+)_(\d{4})([a-z]?)/,
+                          "$1 ($2$3)"
                         );
                       }
                     })()}
