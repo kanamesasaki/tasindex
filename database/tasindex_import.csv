@@ -8,6 +8,7 @@ After the first solar exposure during cruise operations, the REMs (Rocket Engine
 Due to the limitations of the VAX system, it was decided to migrate the thermal model to PC-based thermal code, ESATAN."
 1991-031A,STS 39,CIRRIS 1A,1991-04-28,SINDA,,,,,,,,,,Vendell_etal_1993,,,,
 1992-052A,Topex/Poseidon,System,1992-08-10,TRASYS,,SINDA,,,,,,,,Antreasian_Rosborough_1992,,,"The ocean Topography Experiment/Poseidon Mission (TOPEX/POSEIDON) is a joint project between NASA and CNES, to investigate the seasonal variations of the world's ocean circulations. ","The spacecraft contractor, Fairchild Space Company, has provided spacecraft definitions that consist of both the TRASYS and SINDA models. The TRASYS model consists of 310 surfaces, and the SINDA transient thermal model includes over 500 nodes."
+1992-052A,Topex/Poseidon,Microwave Radiometer,1992-08-10,TRASYS,,SINDA,,,,,,,,Lin_1992,,,,"The TRASYS model consists of 223 nodes. The SINDA flight model consists of 246 diffusion nodes, 2 boundary nodes, 323 linear conductors and 2643 radiation conductors."
 1994-056A,ETS 6,Deployable reflectors,1994-08-28,NEVADA,,SINDA,,,,,,,,Miyasaka_etal_1996,,,,
 1995-065A,SOHO,System,1995-12-02,ESATAN,,,,,,,,,,Poinas_Cande_1997,,,,
 1997-061A,Cassini,Cosmic Dust Analyzer (CDA),1997-10-15,ESATAN,,,,,,,,,,Troppenz_etal_1996,,,,
@@ -68,6 +69,7 @@ Due to the limitations of the VAX system, it was decided to migrate the thermal 
 2014-009G,KSAT 2,System,2014-02-27,Scilab,,,,,,,,,,Fukuda_etal_2015,,,,
 2014-070B,Hodoyoshi 1,System,2014-11-06,Fortran,,Thermal Desktop,,,,,,,,Ogawa_etal_2012,,,,
 2014-070E,Tsubame,System,2014-11-06,Thermal Desktop,,,,,,,,,,Suzuki_etal_2015,,,,
+2014-076B,Shin'en 2,System,2014-12-03,SINDA,,,,,,,,,,Szasz_etal_2016,,,,The Shinen2 SINDA model consists of 47 nodes. The thermal analysis was performed for the worst hot case and worst cold case to ensure the survival of electric components and batteries.
 2014-076H,MASCOT,System,"2014-12-03 (Launch), 2018-10-03 (Deployment)",ESATAN TMS,,,,,,,,,,Celotti_etal_2015,,,,
 2015-003A,SMAP,System,2015-01-31,Thermal Desktop 5.4,,Sinda Fluint 5.4,,,,,,,,Emis_etal_2012,,,,
 2015-003A,SMAP,Radiometer,2015-01-31,Thermal Desktop,,ThermXL,,,,,,,,Mikhaylov_etal_2014,,,,
@@ -108,6 +110,7 @@ Due to the limitations of the VAX system, it was decided to migrate the thermal 
 2022-156E,EQUULEUS,System,2022-11-16,Thermal Desktop,,,,,,,,,,Matsushita_etal_2019,Shibukawa_etal_2020,,,
 2022-170C,MeteoSat 12,System,2022-12-13,ESATAN-TMS,,,,,,,,,,Fluck_2017,,,,
 2023-001CY,KuwaitSat 1,System,2023-01-03,COMSOL,,,,,,,,,,Meerza_etal_2023,,,,
+2023-072,SNIPE,System,2023-05-25,Thermal Desktop,,MATLAB,,,,,,,,Kim_etal_2023,,,,The SNIPE satellite thermal model was build with over 2100 nodes as GMM by using Thermal Desktop. The TMM values were correlated with the thermal balance test using the genetic-algorithm-based multi-objective optimization algorithm NSGA-II.
 2023-185L,EIRSAT 1,System,2023-12-01,Thermal Desktop,,,,,,,,,,Wallace_etal_2018,,,,
 2024-116A,SVOM,System,2024-06-22,Thermica,,MSC Sinda,,,,,,,,Gao_etal_2020,,,,
 2024-116A,SVOM,MXT CAMera (MCAM),2024-06-22,NX-TMG,,ThermXL,,SYSTEMA,,,,,,Boufracha_etal_2022,,,,
