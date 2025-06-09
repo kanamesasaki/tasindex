@@ -66,8 +66,9 @@ Due to the limitations of the VAX system, it was decided to migrate the thermal 
 2012-073A,Gokturk 2,System,2012-12-18,Thermica v.3.2.20.1,,SINDA/G,,,,,,,,Arabaci_Dirgin_2015,,,,
 2013-018C,Turksat 3USAT,System,2013-04-26,ThermXL,,,,,,,,,,Bulut_etal_2017,,,,
 2013-066S,ICUBE 1,System,2013-11-21,ESATAN,,ESARAD,,,,,,,,Mahmood_etal_2011,,,,
-2014-009G,KSAT 2,System,2014-02-27,Scilab,,,,,,,,,,Fukuda_etal_2015,,,,
-2014-070B,Hodoyoshi 1,System,2014-11-06,Fortran,,Thermal Desktop,,,,,,,,Ogawa_etal_2012,,,,
+2014-009G,KSAT 2,System,2014-02-27,Scilab,,,,,,,,,,Fukuda_etal_2015,,,"KSAT-2 is a 1U-CubeSat with two 100 × 100 mm² deployable solar panels. It was launched on 2014-02-28, and operated for about 80 days. ","KSAT-2 thermal model consists of 22 nodes, and the numerical calculation was performed by using Scilab."
+2014-070B,Hodoyoshi 1,System,2014-11-06,Fortran,,Thermal Desktop Version 4.8,,,,,,,,Ogawa_etal_2012,,,Hodoyoshi-1 is a micro stellite that is about 60 cm cube and 60kg.,"The external surface of the satellite is Alodine 1000. The satellite internal structures are black anodized. Between the external structure and internal structure, thermal isolators (glass epoxy) are inserted, so that the internal instruments are not directly influenced by the external structure's temperature variations.
+Regrading the thermal anlysis, one-node and two-node analysis were performed with Fortran, and multi-node thermal analysis was performed with Thermal Desktop."
 2014-070E,Tsubame,System,2014-11-06,Thermal Desktop,,,,,,,,,,Suzuki_etal_2015,,,,
 2014-076B,Shin'en 2,System,2014-12-03,SINDA,,,,,,,,,,Szasz_etal_2016,,,,The Shinen2 SINDA model consists of 47 nodes. The thermal analysis was performed for the worst hot case and worst cold case to ensure the survival of electric components and batteries.
 2014-076H,MASCOT,System,"2014-12-03 (Launch), 2018-10-03 (Deployment)",ESATAN TMS,,,,,,,,,,Celotti_etal_2015,,,,
@@ -84,7 +85,7 @@ Due to the limitations of the VAX system, it was decided to migrate the thermal 
 2018-004W,PicSat,System,2018-01-12,SYSTEMA,,THERMICA,,,,,,,,Flecht_2016,,,,
 2018-016A,Tricom 1R,System,2018-02-03,Thermal Desktop,,SINDA/FLUINT,,,,,,,,Miyata_etal_2019,,,,
 2018-042A,InSight,SEIS,"2018-05-05 (Launch), 2018-11-26 (Landing)",SYSTEMA,,,,,,,,,,Andre_etal_2019,Perrin_etal_2014,,,
-2018-042A,InSight,HP3,"2018-05-05 (Launch), 2018-11-26 (Landing)",Thermal Desktop,,,,,,,,,,Gencosmanoglu_etal_2014,,,,
+2018-042A,InSight,HP3,"2018-05-05 (Launch), 2018-11-26 (Landing)",Thermal Desktop,,,,,,,,,,Gencosmanoglu_etal_2014,,,,"Thermal models for Mole, Support Structure, Radiometer, and Back-end electronics were created using Thermal Desktop. Support Structure convective heat exchange with Martian atmosphere is modelled with a constant convective heat transfer coefficient. According to the MArs Pathfinder and Mars rover Sojourner tests: h = 1–2 W/m²K for wind speed of 0–5 m/sec."
 2018-080A,BepiColombo,MPO,2018-10-20,ESATAN v5.5,,ESARAD v6.2,,,,,,,,Tessarin_etal_2010,,,,
 2018-080A,BepiColombo,MMO,2018-10-20,Thermal Desktop,,ESATAN-TMS,,,,,,,,Ogawa_2018,,,,
 2018-099Y,MOVE II,System,2018-12-03,MATLAB Simulink,,,,,,,,,,Koch_2022,,,,
@@ -116,7 +117,7 @@ Due to the limitations of the VAX system, it was decided to migrate the thermal 
 2024-116A,SVOM,MXT CAMera (MCAM),2024-06-22,NX-TMG,,ThermXL,,SYSTEMA,,,,,,Boufracha_etal_2022,,,,
 2024-128B,³Cat 4,System,2024-07-09,Thermal Desktop 6.3.0.3,,,,,,,,,,Buitrago-Leiva_etal_2024,,,,
 2024-182A,Europa Clipper,ECIPA,2024-10-14,ThermXL,,,,,,,,,,Kandilian_etal_2019,,,,
-,AlAinSat-1,System,2025-01-14,NX6.0 TMG,,,,,,,,,,Seyedzadeh_etal_2025,,,,
+,AlAinSat-1,System,2025-01-14,NX6.0 TMG,,,,,,,,,,Seyedzadeh_etal_2025,,,,"The meshed thermal model of AlainSat-1 consists of 20816 elements. Using a workstation Windows 10 Enterprize woth 3.10 GHz Intel Core i9-9900 and 8 GB RAM, a steady state thermal analysis takes 3–5 min, and a transient thermal analysis takes 1–2 hours to reach convergence."
 ,Sentinel 1,System,"2014-04-03 (Sentinel 1A), 2016-04-25 (Sentinel 1B)",THERMICA,,ESATAN,,,,,,,,Bruno_etal_2011,,,,
 ,Sentinel 2,System,"2015-06-23 (Sentinel 2A), 2017-03-07 (Sentinel 2B)",ESATAN TMS r6,,,,,,,,,,Buhl_etal_2018,,,,
 ,Sentinel 3,System,"2016-02-16 (Sentinel 3A), 2018-04-25 (Sentinel 3B)",THERMICA,,ESATAN,,,,,,,,Stefanis_etal_2015,,,,
