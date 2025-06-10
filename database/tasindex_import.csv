@@ -84,6 +84,9 @@ Regrading the thermal anlysis, one-node and two-node analysis were performed wit
 2016-025C,OUFTI-1,System,2016-04-25,ESATAN-TMS,,,,,,,,,,Jacques_2009,,,,
 2016-040J,Swayam,System,2016-06-22,SIEMENS NX 8.0,,NX SPACE SYSTEMS THERMAL,,,,,,,,Wachche_etal_2014,,,,
 2016-055A,OSIRIS-Rex,OCAMS,2016-09-08,Thermal Desktop,,SINDA/FLUINT,,,,,,,,,,,,
+2016-055A,OSIRIS-Rex,REXIS,2016-09-08,Thermal Desktop,,,,,,,,,,Stout_Masterson_2014,,,,"The Regolith X-ray Imaging Spectrometer (REXIS) instrument is one of the five payload instruments on the OSIRIS-Rex asteroid sample return mission. The REXIS instrument consists of two assemblies: the spectrometer and the solar X-ray monitor (SXM).
+Two thermal models of the spectrometer were created in Thermal Desktop: reduced model with fewer than 100 nodes, and the detailed model with more than 2000 nodes.
+For the SXM, one thermal model was created in Thermal Desktop with approximately 100 nodes."
 2017-034A,HXMT,Low Energy X-ray Instrument (LE),2017-06-15,I-DEAS TMG,,,,,,,,,,Wang_etal_2010,,,,
 2018-004W,PicSat,System,2018-01-12,SYSTEMA,,THERMICA,,,,,,,,Flecht_2016,,,,
 2018-016A,Tricom 1R,System,2018-02-03,Thermal Desktop,,SINDA/FLUINT,,,,,,,,Miyata_etal_2019,,,,
