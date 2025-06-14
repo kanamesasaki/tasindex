@@ -22,7 +22,7 @@ One major concern is the thermal distortions resulting from on-orbit thermal var
 2012-038A,HTV 3,SCaN Testbed,2012-08-20,Thermal Desktop,,,,,,,,,,Siamidis_Yuko_2014,,,"The Space Communications and Navigation (SCaN) Testbed was launched aboard the JAXA HTV3 on 2012-08-20. On 2012-08-07, the SCaN Testbed was installed on the ISS PC ELC.",
 2016-024A,SpaceX CRS-8,Bigelow Expandable Activity Module (BEAM),2016-04-08,Thermal Desktop,,,,,,,,,,Walker_Iovine_201,,,,
 2017-045A,SpaceX CRS-12,ISS-CREAM,2017-08-14,Thermal Desktop,,FloCAD,,SINDA/FLUINT,,,,,,Thorpe_2015,,,,
-2018-055B,SpaceX CRS-15,ECOSTRESS,2018-06-29,Thermal Desktop 5.7,,,,,,,,,,Cha_etal_2020,,,"The ECOSystem Spaceborne Thermal Radiometer Experiment on Space Station (ECOSTRESS) instrument is a multi-spectral thermal infrared imaging radiaometer. Ist primary mission is to investigate and understand how climate change affects water and carbon usage on Earth. ECOSTRESS was launched on 2018-06-29 by the SpaceX Falcon9 Rocket on the CRS-15 mission to the International Space Station (ISS), installed on the Japanese Experiment Module External Facility (JEM-EF), and completed nine months of operation in space.",
+2018-055B,SpaceX CRS-15,ECOSTRESS,2018-06-29,Thermal Desktop 5.7,,,,,,,,,,Cha_etal_2020,,,"The ECOSystem Spaceborne Thermal Radiometer Experiment on Space Station (ECOSTRESS) instrument is a multi-spectral thermal infrared imaging radiaometer. Ist primary mission is to investigate and understand how climate change affects water and carbon usage on Earth. ECOSTRESS was launched on 2018-06-29 by the SpaceX Falcon9 Rocket on the CRS-15 mission to the International Space Station (ISS), installed on the Japanese Experiment Module External Facility (JEM-EF), and completed nine months of operation in space.","The ECOSTRESS Heat Rejection System (HRS) is a single-phase liquid pumped fluid loop that was designed to collect 800W of payload heat dissipation and environmental heating. The working fluid is FC-72, a perfluorocarbon dielectric liquid by 3M. Fluid circulation is provided by the JEM-EF Active Thermal Control System (ATCS). "
 2020-030A,HTV 9,iSIM-170,2020-05-20,Thermal Desktop,,,,,,,,,,Guzmán_etal_2020,,,,
 1998-067CS,WE WISH,System,"2012-07-21 (Launch), 2012-10-04 (Deployment)",ANSYS Mechanical APDL,,Thermal Desktop,,,,,,,,Cybernet_2013,,,WE WISH (World Environmental Watching & Investigation from Space Height) is a 1U CubeSat developed by the Japanese company Meisei Electric. WE WISH was deployed from the Japanese Experiment Module (JEM) of the International Space Station (ISS) on 2012-10-04. WE WISH re-entered Earth's atmosphere on 2013-03-11.,"For the thermal design of WE WISH, ANSYS Mechanical APDL and Thermal Desktop were used as the analysis software. Thermal Desktop model was developed for the orbital heat flux calculation with reduced number of nodes."
 1998-067HT,Diwata 1,System,"2016-03-23 (Launch), 2016-04-27 (Deployment)",In-house tool,,Thermal Desktop,,,,,,,,Mitchao_etal_2017,,,"DIWATA-1 is the first Philippine-made micro satellite with the size of 55 x 35 x 55 cm³. DIWATA-1 was launched by the Atlas V rocket on 2016-03-23, and it was deployed from was deployed from the Japanese Experiment Module (JEM) of the International Space Station (ISS).",
@@ -51,7 +51,8 @@ One major concern is the thermal distortions resulting from on-orbit thermal var
 2006-005A,Akari,Cryostat,2006-02-21,TRASYS ver. 28,,SINDA/G ver. 2.2,,,,,,,,Hirabayashi_etal_2008,,,,
 2006-016A,CALIPSO,PROTEUS,2006-04-28,AAS Coratherm thermal software,,,,,,,,,,Gasbarr_etal_2007,,,,
 2006-041A,Hinode,EUV Imaging Spectrometer (EIS),2006-09-22,ESATAN,,ESARAD,,,,,,,,Castelli_etal_2005,,,,
-2006-041F,HITSat,System,2006-09-22,Thermal Desktop,,SINDA/FLUINT,,,,,,,,Satori_etal_2007,,,,
+2006-041F,HITSat,System,2006-09-22,Thermal Desktop,,SINDA/FLUINT,,,,,,,,Satori_etal_2007,,,HIT-SAT is a nanosatellite with a size of 120 × 130 × 120 mm³ and a mass of 2.7 kg. It was launched by M-V-7 rocket into a sun-synchronous orbit of an altitude of 279–660 km and an inclination of 98.32 deg. ,"As the HIT-SAT is placed in the terminator orbit (LTAN 0600), HIT-SAT is continuously illuminated by the Sun.
+The thermal analysis is performed by using Thermal Desktop and SINDA/FLUINT. The analysis result shows that the sun-illuninated surface temperatures are 272–277 K, and the opposite surface temperatures are 267–271 K."
 2008-008A,Jules Verne,System,2008-03-09,ESATAN,,Thermica,,,,,,,,Hulier_etal_2003,Guyot_etal_2009,,,
 2008-021E,COMPASS 1,System,2008-04-28,ANSYS,,,,,,,,,,Czernik_2004,,,,
 2008-021G,Delfi-C3,System,2008-04-28,MATLAB,,,,,,,,,,Cassinis_2017,,,,
@@ -60,10 +61,13 @@ One major concern is the thermal distortions resulting from on-orbit thermal var
 2009-028B,Pharmasat,System,2009-05-19,Thermal Desktop,,,,,,,,,,Diaz-Aguado_etal_2011,,,,
 2009-048A,HTV 1,System,2009-09-10,Thermal Desktop v5.1,,TRASYS,,SINDA v5.1,,RadCAD v5.1,,,,Kamiya_etal_2010,,,,
 2010-020F,Unitec-1,System,2010-05-20,Thermal Desktop,,SINDA/FLUINT,,,,,,,,Totani_etal_2010,,,,
+2010-032A,COMS 1,GOCI,2010-06-26,Thermica v3.2,,,,,,,,,,Kim_etal_2010,,,,"The GOCI is composed of the telescope, FPA (Focal Plane Array), mechanisms, and secondary structure. The GOCI thermal model is made of thin shell plates thermal meshing with 3674 lumped thermal nodes."
 2010-062C,O/OREOS (USA 219),System,2010-11-20,Thermal Desktop,,,,,,,,,,Diaz-Aguado_etal_2011,,,,
 2010-062D,FASTSAT-HSV01 (USA 220),System,2010-11-20,Thermal Desktop,,,,,,,,,,Mckelvey_2011,,,,
 2010-062F,FAST 1 (USA 222),FASTRAC-A and FASTRAC-B ,2010-11-20,ABAQUS,,MATLAB,,,,,,,,Diaz-Aguado_etal_2006,,,,
 2011-007A,ATV 2,System,2011-02-16,Thermica,,ESATAN,,,,,,,,Strom_etal_2012,,,,
+2011-058A,Megha-Tropiques,SAPHIR and SCARAB,2011-10-12,Thermica,,Thermisol,,,,,,,,Pasquier_etal_2008,,,"Megha-Tropiques is a joint program between  ISRO and CNES for the atmospheric research. The satellite carries three payloads: MADRAS, SAPHIR, and SCARAB. ","SCARAB is a radiometer to measure the radiative flux at the top of the atmosphere. The instrument consists of two assemblies: the Optical Sensor Module (OSM) and the Electronic Module (EM). The SCARAB OSM 
+SAPHIR is a microwave radiometer to scan the vertical profile and horizontal distribution of humidity. The instrument consists of two assemblieds: SAPHIR RF Unit (RFU) and SAPHIR Electronic Unit (EM)."
 2011-070A,Mars Science Laboratory (MSL),System,2011-11-26,I-DEAS TMG,,,,,,,,,,Paris_etal_2008,Mastropietro_etal_2010,Novak_etal_2012,,
 2012-048D,CSSWE,System,2012-09-13,Thermal Desktop,,,,,,,,,,Li_etal_2012,,,,
 2012-073A,Gokturk 2,System,2012-12-18,Thermica v.3.2.20.1,,SINDA/G,,,,,,,,Arabaci_Dirgin_2015,,,,
@@ -117,11 +121,14 @@ For the SXM, one thermal model was created in Thermal Desktop with approximately
 2022-156E,EQUULEUS,System,2022-11-16,Thermal Desktop,,,,,,,,,,Matsushita_etal_2019,Shibukawa_etal_2020,,,
 2022-170C,MeteoSat 12,System,2022-12-13,ESATAN-TMS,,,,,,,,,,Fluck_2017,,,,
 2023-001CY,KuwaitSat 1,System,2023-01-03,COMSOL,,,,,,,,,,Meerza_etal_2023,,,,
+2023-001CZ,Sharijahsat 1,System,2023-01-03,Systema ,,Thermica,,,,,,,,AlSabta_etal_2020,,,,
 2023-072,SNIPE,System,2023-05-25,Thermal Desktop,,MATLAB,,,,,,,,Kim_etal_2023,,,,The SNIPE satellite thermal model was build with over 2100 nodes as GMM by using Thermal Desktop. The TMM values were correlated with the thermal balance test using the genetic-algorithm-based multi-objective optimization algorithm NSGA-II.
+2023-109E,ARCADE,System,2023-07-30,THERMICA,,,,,,,,,,Selvadurai_etal_2020,,,"The ARCADE (Atmospheric Coupling and Dynamics Explorer) is a 27U satellite developed by Satellite Research Centre (SaRC) at Nanyang Technological University (NTU).  The main payload in ARCADE is AtmoLITE (Atmospheric Limb Interferometer for Temperature Exploration), a near Infrared imager to explore Earth's Meteosphere Lower Termosphere (MLT).",
 2023-185L,EIRSAT 1,System,2023-12-01,Thermal Desktop,,,,,,,,,,Wallace_etal_2018,,,,
 2024-116A,SVOM,System,2024-06-22,Thermica,,MSC Sinda,,,,,,,,Gao_etal_2020,,,,
 2024-116A,SVOM,MXT CAMera (MCAM),2024-06-22,NX-TMG,,ThermXL,,SYSTEMA,,,,,,Boufracha_etal_2022,,,,
-2024-128B,³Cat 4,System,2024-07-09,Thermal Desktop 6.3.0.3,,,,,,,,,,Buitrago-Leiva_etal_2024,,,,
+2024-127A,Turksat 6A,System,2024-07-08,MSC THERMICA 4.8.2,,MSC Sinda,,,,,,,,Ataer_etal_2023,,,Turksat 6A is the Turkey's first indigenous and national communications satellite.,TMM and GMM of the satellite are developed in MSC THERMICA 4.8.2 and the thermal analyses are executed in MSC Sinda.
+2024-128B,³Cat 4,System,2024-07-09,Thermal Desktop 6.3.0.3,,,,,,,,,,Buitrago-Leiva_etal_2024,,,"The ³Cat 4 is the fourth mission in the CubeSat series developed by the Universitat Política de Catalunya (UPC) NanoSat Lab. The mission has three key objectives: the educational platform for graduate and undergraduate students, technological demonstration of the Flexible Microwave Payload (FMPL-1), and scientific experiments with Global Navigation Satellite System Reflectometry (GNSS-R). ",
 2024-182A,Europa Clipper,ECIPA,2024-10-14,ThermXL,,,,,,,,,,Kandilian_etal_2019,,,,
 ,AlAinSat-1,System,2025-01-14,NX6.0 TMG,,,,,,,,,,Seyedzadeh_etal_2025,,,,"The meshed thermal model of AlainSat-1 consists of 20816 elements. Using a workstation Windows 10 Enterprize woth 3.10 GHz Intel Core i9-9900 and 8 GB RAM, a steady state thermal analysis takes 3–5 min, and a transient thermal analysis takes 1–2 hours to reach convergence."
 ,Sentinel 1,System,"2014-04-03 (Sentinel 1A), 2016-04-25 (Sentinel 1B)",THERMICA,,ESATAN,,,,,,,,Bruno_etal_2011,,,,
