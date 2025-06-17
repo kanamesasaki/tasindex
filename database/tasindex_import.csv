@@ -49,6 +49,7 @@ One major concern is the thermal distortions resulting from on-orbit thermal var
 2004-006C,Philae,MUPUS penetrator,,ANSYS 8.0,,,,,,,,,,Seweryn_etal_2005,,,,
 2004-014A,Gravity Probe B,Forward Electronics Enclosure (FEE),2004-04-20,SINDA,,TSS,,,,,,,,Hsu_etal_1995,,,,
 2004-014A,Gravity Probe B,Gas Management Assembly (GMA),2004-04-20,I-DEAS TMG,,,,,,,,,,Sexton_etal_2003,,,,
+2004-030A,MESSENGER,Power System Electronics (PSE),2004-08-03,COSMOS Version 2.6,,,,,,,,,,Ercol_etal_2006,,,,
 2005-017B,Hamsat,System,2005-05-05,I-DEAS TMG,,,,,,,,,,Narayana_Reddy_2007,,,,
 2006-F01,FalconSat 2,System,2006-03-24,MATLAB Simulink,,,,,,,,,,Lyon_etal_2002,,,,
 2006-005A,Akari,Cryostat,2006-02-21,TRASYS ver. 28,,SINDA/G ver. 2.2,,,,,,,,Hirabayashi_etal_2008,,,,
