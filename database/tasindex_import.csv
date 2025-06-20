@@ -14,6 +14,7 @@ Due to the limitations of the VAX system, it was decided to migrate the thermal 
 1994-022A,GOES 8,Secondary Mirror,1994-04-13,I-DEAS/TMG,,NEVADA,,,,,,,,Ghaffarian_Sprunger_1996,,,,Detailed radiation and conduction thermal models of the secondary mirror assembly were developed using I-DEAS/TMG. The NEVADA program was utilized to generate the solar loads on the secondary mirror assembly for 213 different sun vectors.
 1994-056A,ETS 6,Deployable reflectors,1994-08-28,NEVADA,,SINDA,,,,,,,,Miyasaka_etal_1996,Tsunoda_etal_1991,,,
 1995-065A,SOHO,System,1995-12-02,ESATAN,,,,,,,,,,Poinas_Cande_1997,,,,
+1996-062A,Mars Global Surveyor,Solar Array,1996-11-07,Thermal Desktop,,MSC PATRAN,,,,,,,,Amundsen_etal_2003,Amundsen_etal_2005,,,
 1997-061A,Cassini,Cosmic Dust Analyzer (CDA),1997-10-15,ESATAN,,,,,,,,,,Troppenz_etal_1996,,,,
 1997-061C,Huygens,System,"1997-10-15 (Launch), 2004-12-25 (Deployment)",Thermica,,ESATAN,,,,,,,,Elsner_1993,,,,The radiative exchange factors and the external fluxes to the Huygens probe are calculated by THERMICA.
 1998-061B,SEDSAT 1,System,1998-10-24,SINDA,,NEVADA,,THAWS,,,,,,Randorf_1992,,,SEDSAT 1 is a cubic satellite with a size of 34 × 34 × 30.5 cm³ and weighing about 37 kg.,"SEDSAT 1 has an in-orbit temperature requirement band between 5 °C and 15 °C, due to the NiM Hydride batteries and the solar cells. The latest SINDA/NEVADA model of SEDSAT 1 consists of 48 nodes."
@@ -64,6 +65,7 @@ The thermal analysis is performed by using Thermal Desktop and SINDA/FLUINT. The
 2009-002E,SOHLA 1,System,2009-01-23,Thermal Desktop,,SINDA/FLUINT,,,,,,,,Okamoto_2006a,,,,
 2009-002F,SDS 1,System,2009-01-23,Thermal Desktop,,SINDA/FLUINT,,,,,,,,Okamoto_2006b,,,,
 2009-028B,Pharmasat,System,2009-05-19,Thermal Desktop,,,,,,,,,,Diaz-Aguado_etal_2011,,,,
+2009-031A,Lunar Reconnaissance Orbiter (LRO),System,2009-06-18,SINDA,,,,,,,,,,Garrison_etal_2012,Baker_etal_2009,,,
 2009-048A,HTV 1,System,2009-09-10,Thermal Desktop v5.1,,TRASYS,,SINDA v5.1,,RadCAD v5.1,,,,Kamiya_etal_2010,,,,
 2010-020F,Unitec-1,System,2010-05-20,Thermal Desktop,,SINDA/FLUINT,,,,,,,,Totani_etal_2010,,,,
 2010-032A,COMS 1,GOCI,2010-06-26,Thermica v3.2,,,,,,,,,,Kim_etal_2010,,,,"The GOCI is composed of the telescope, FPA (Focal Plane Array), mechanisms, and secondary structure. The GOCI thermal model is made of thin shell plates thermal meshing with 3674 lumped thermal nodes."
@@ -99,9 +101,11 @@ Regrading the thermal anlysis, one-node and two-node analysis were performed wit
 2016-055A,OSIRIS-Rex,REXIS,2016-09-08,Thermal Desktop,,,,,,,,,,Stout_Masterson_2014,,,,"The Regolith X-ray Imaging Spectrometer (REXIS) instrument is one of the five payload instruments on the OSIRIS-Rex asteroid sample return mission. The REXIS instrument consists of two assemblies: the spectrometer and the solar X-ray monitor (SXM).
 Two thermal models of the spectrometer were created in Thermal Desktop: reduced model with fewer than 100 nodes, and the detailed model with more than 2000 nodes.
 For the SXM, one thermal model was created in Thermal Desktop with approximately 100 nodes."
+2017-009A,SpaceX CRS-10,SAGE III,2017-02-19,Thermal Desktop 5.7,,,,,,,,,,Liles_etal_2017,Amundsen_etal_2017,,,
 2017-034A,HXMT,Low Energy X-ray Instrument (LE),2017-06-15,I-DEAS TMG,,,,,,,,,,Wang_etal_2010,,,,
 2017-045A,SpaceX CRS-12,ISS-CREAM,2017-08-14,Thermal Desktop,,FloCAD,,SINDA/FLUINT,,,,,,Thorpe_2015,,,,
 2018-004W,PicSat,System,2018-01-12,SYSTEMA,,THERMICA,,,,,,,,Flecht_2016,,,,
+2018-004AD,STEP Cube Lab,System,2018-01-12,Thermal Desktop,,,,,,,,,,Kang_Oh_2016,,,,
 2018-016A,Tricom 1R,System,2018-02-03,Thermal Desktop,,SINDA/FLUINT,,,,,,,,Miyata_etal_2019,,,,
 2018-042A,InSight,SEIS,"2018-05-05 (Launch), 2018-11-26 (Landing)",SYSTEMA,,,,,,,,,,Andre_etal_2019,Perrin_etal_2014,,,
 2018-042A,InSight,HP3,"2018-05-05 (Launch), 2018-11-26 (Landing)",Thermal Desktop,,,,,,,,,,Gencosmanoglu_etal_2014,,,,"Thermal models for Mole, Support Structure, Radiometer, and Back-end electronics were created using Thermal Desktop. Support Structure convective heat exchange with Martian atmosphere is modelled with a constant convective heat transfer coefficient. According to the MArs Pathfinder and Mars rover Sojourner tests: h = 1–2 W/m²K for wind speed of 0–5 m/sec."
@@ -135,6 +139,7 @@ For the SXM, one thermal model was created in Thermal Desktop with approximately
 2023-001CY,KuwaitSat 1,System,2023-01-03,COMSOL,,,,,,,,,,Meerza_etal_2023,,,,
 2023-001CZ,Sharijahsat 1,System,2023-01-03,Systema ,,Thermica,,,,,,,,AlSabta_etal_2020,,,,
 2023-072,SNIPE,System,2023-05-25,Thermal Desktop,,MATLAB,,,,,,,,Kim_etal_2023,,,,The SNIPE satellite thermal model was build with over 2100 nodes as GMM by using Thermal Desktop. The TMM values were correlated with the thermal balance test using the genetic-algorithm-based multi-objective optimization algorithm NSGA-II.
+2023-072A,NEXTSat 2,System,2023-05-25,NX-12.0,,TMG-12.0,,,,,,,,Cho_etal_2022,,,,
 2023-109E,ARCADE,System,2023-07-30,THERMICA,,,,,,,,,,Selvadurai_etal_2020,,,"The ARCADE (Atmospheric Coupling and Dynamics Explorer) is a 27U satellite developed by Satellite Research Centre (SaRC) at Nanyang Technological University (NTU).  The main payload in ARCADE is AtmoLITE (Atmospheric Limb Interferometer for Temperature Exploration), a near Infrared imager to explore Earth's Meteosphere Lower Termosphere (MLT).",
 2023-185L,EIRSAT 1,System,2023-12-01,Thermal Desktop,,,,,,,,,,Wallace_etal_2018,,,,
 2024-101A,EarthCARE,MSI-VNS,2024-05-28,THERMICA,,ESATAN,,,,,,,,Doornink_etal_2011,,,"The EarthCARE mission objective is the observation of clouds and aerosols from low Earth orbit. The payloads of the EarthCARE satellite include the W-band Cloud Profiling Radar (CPR), ATLID LIDAR, Broadband Radiometer (BBR), and the Multispectral Imager (MSI). The MSI instrument consists of two parts: the Visible, Near infrared and Short wave infrared (VNS) unit, and the Thermal InfraRed (TIR) unit.",
