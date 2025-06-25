@@ -1,4 +1,7 @@
 cospar_id,spacecraft_name,analysis_object,launch_date,software_1,version_1,software_2,version_2,software_3,version_3,software_4,version_4,software_5,version_5,reference_1,reference_2,reference_3,spacecraft_description,thermal_description
+1971-063C,Apollo 15 Lunar Module,Lunar Roving Vehicle (LRV),1971-07-26,Chrysler Shape Factor,,LOHARP,,CINDA,,SINDA,,,,Creel_2006,Creel_2014,Creel_2017,,
+1972-065A,OAO 3,Ames Heat Pipe Experiment (AHPE),1972-08-21,SINDA,,,,,,,,,,Eninger_etal_1976,,,,
+1981-122A,Marecs-A,System,1981-12-20,SINDA,,LOHARP,,,,,,,,Chalmers_Stumpel_1982,,,,
 1989-033B,Magellan,System,1989-05-04,SINDA,,TRASYS,,,,,,,,Neumann_etal_1993,,,"The Magellan spacecraft was launched by the Space Shuttle Atlantis on May 4, 1989. The spacecraft reached Venus orbit on August 10, 1990, and performed radar mapping and other scientific experiments.","A solar thermal vacuum (STV) test was performed in the on-orbit configuration. The spacecraft overall thermal balance was within about 5°C of predictions in nearly all cases.
 
 After the first solar exposure during cruise operations, the REMs (Rocket Engine Modules) were observed to be about 20°C above expected values. The SINDA thermal math model was upgraded to increase REM detail and prediction capability within <10°C."
@@ -9,6 +12,7 @@ Due to the limitations of the VAX system, it was decided to migrate the thermal 
 1991-027A,STS 37,CETA,1991-04-05,TRASYS,,SINDA,,,,,,,,Witsil_Foss_1990,,,STS-37 was the eighth flight of the shuttle Atlantis and the 39th shuttle flight.,
 1991-031A,STS 39,CIRRIS 1A,1991-04-28,SINDA,,,,,,,,,,Vendell_etal_1993,,,,
 1992-049A,STS 46,TSS-1,1992-06-26,TRASYS,,MITAS,,MINMAX,,,,,,Chapter_1991,Chapter_1993,,,
+1992-049B,EURECA,System,1992-08-02,LOHARP,,SINDA,,,,,,,,Laux_Ebeling_1985,,,,
 1992-052A,Topex/Poseidon,System,1992-08-10,TRASYS,,SINDA,,,,,,,,Antreasian_Rosborough_1992,,,"The ocean Topography Experiment/Poseidon Mission (TOPEX/POSEIDON) is a joint project between NASA and CNES, to investigate the seasonal variations of the world's ocean circulations. ","The spacecraft contractor, Fairchild Space Company, has provided spacecraft definitions that consist of both the TRASYS and SINDA models. The TRASYS model consists of 310 surfaces, and the SINDA transient thermal model includes over 500 nodes."
 1992-052A,Topex/Poseidon,Microwave Radiometer,1992-08-10,TRASYS,,SINDA,,,,,,,,Lin_1992,,,,"The TRASYS model consists of 223 nodes. The SINDA flight model consists of 246 diffusion nodes, 2 boundary nodes, 323 linear conductors and 2643 radiation conductors."
 1993-009B,SCD 1,System,1993-02-09,CATER,,ANATER,,,,,,,,Genaro_etal_2016,,,,
