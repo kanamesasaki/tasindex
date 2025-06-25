@@ -53,6 +53,7 @@ One major concern is the thermal distortions resulting from on-orbit thermal var
 2002-009A,Envisat 1,Polar Platform,2002-03-01,ESATAN,,THERMICA,,ESABASE,,,,,,Dolce_etal_1995,,,,
 2002-009A,Envisat 1,ASAR Active Antenna,2002-03-01,I-DEAS TMG ,,,,,,,,,,Harvey_etal_1997,,,,
 2002-054A,Alsat 1,Honeycomb Panel,2002-11-28,MSC PATRAN,,MSC NASTRAN,,,,,,,,Boudjemai_etal_2015,,,,
+2002-F03,Stentor,Deployable Radiator (DR),2002-12-11,Coratherm,,SINDA/FLUINT,,,,,,,,Tjiptahardja_etal_2000,,,,
 2003-017A,GALEX,System,2003-04-28,SINDA/3D,,TSS,,,,,,,,Lee_Tsuyuki_2001,,,,
 2003-027A,Spirit,System,"2003-06-10 (Launch), 2004-01-04 (Landing)",TAS,,TSS,,SINDA/FLUINT,,,,,,Novak_etal_2005,,,,
 2003-031H,CANX 1,System,2003-06-30,I-DEAS TMG,,,,,,,,,,Jeans_2003,,,,
@@ -68,6 +69,7 @@ One major concern is the thermal distortions resulting from on-orbit thermal var
 2005-017B,Hamsat,System,2005-05-05,I-DEAS TMG,,,,,,,,,,Narayana_Reddy_2007,,,,
 2006-F01,FalconSat 2,System,2006-03-24,MATLAB Simulink,,,,,,,,,,Lyon_etal_2002,,,,
 2006-005A,Akari,Cryostat,2006-02-21,TRASYS ver. 28,,SINDA/G ver. 2.2,,,,,,,,Hirabayashi_etal_2008,,,,
+2006-008,ST5,System,2006-03-22,TSS,,SINDA,,,,,,,,Douglas_etal_2001,,,,
 2006-016A,CALIPSO,PROTEUS,2006-04-28,AAS Coratherm thermal software,,,,,,,,,,Gasbarr_etal_2007,,,,
 2006-041A,Hinode,EUV Imaging Spectrometer (EIS),2006-09-22,ESATAN,,ESARAD,,,,,,,,Castelli_etal_2005,,,,
 2006-041F,HITSat,System,2006-09-22,Thermal Desktop,,SINDA/FLUINT,,,,,,,,Satori_etal_2007,,,HIT-SAT is a nanosatellite with a size of 120 × 130 × 120 mm³ and a mass of 2.7 kg. It was launched by M-V-7 rocket into a sun-synchronous orbit of an altitude of 279–660 km and an inclination of 98.32 deg. ,"As the HIT-SAT is placed in the terminator orbit (LTAN 0600), HIT-SAT is continuously illuminated by the Sun.
