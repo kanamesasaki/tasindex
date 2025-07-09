@@ -18,6 +18,7 @@ Due to the limitations of the VAX system, it was decided to migrate the thermal 
 1992-052A,Topex/Poseidon,Microwave Radiometer,1992-08-10,TRASYS,,SINDA,,,,,,,,Lin_1992,,,,"The TRASYS model consists of 223 nodes. The SINDA flight model consists of 246 diffusion nodes, 2 boundary nodes, 323 linear conductors and 2643 radiation conductors."
 1993-009B,SCD 1,System,1993-02-09,CATER,,ANATER,,,,,,,,Genaro_etal_2016,,,,
 1994-006A,STS 60,CAPL,1994-02-03,SINDA85/FLUINT,,,,,,,,,,Marino_Krotiuk_1992,Butler_etal_1995,,,
+1994-006A,STS 60,TPX/G557,1994-02-03,ESATAN/FHTS,,,,,,,,,,Delil_etal_1993,Delil_1995,,,
 1994-022A,GOES 8,Secondary Mirror,1994-04-13,I-DEAS/TMG,,NEVADA,,,,,,,,Ghaffarian_Sprunger_1996,,,,Detailed radiation and conduction thermal models of the secondary mirror assembly were developed using I-DEAS/TMG. The NEVADA program was utilized to generate the solar loads on the secondary mirror assembly for 213 different sun vectors.
 1994-056A,ETS 6,Deployable reflectors,1994-08-28,NEVADA,,SINDA,,,,,,,,Miyasaka_etal_1996,Tsunoda_etal_1991,,,
 1995-065A,SOHO,System,1995-12-02,ESATAN,,,,,,,,,,Poinas_Cande_1997,,,,
@@ -74,6 +75,7 @@ One major concern is the thermal distortions resulting from on-orbit thermal var
 2005-017B,Hamsat,System,2005-05-05,I-DEAS TMG,,,,,,,,,,Narayana_Reddy_2007,,,,
 2006-F01,FalconSat 2,System,2006-03-24,MATLAB Simulink,,,,,,,,,,Lyon_etal_2002,,,,
 2006-005A,Akari,Cryostat,2006-02-21,TRASYS ver. 28,,SINDA/G ver. 2.2,,,,,,,,Hirabayashi_etal_2008,,,,
+"2006-047A, 2006-047B","STEREO A, STEREO B",SECCHI,2006-10-26,Thermica,,TSS,,,,,,,,Peabody_2002,,,,
 2006-008,ST5,System,2006-03-22,TSS,,SINDA,,,,,,,,Douglas_etal_2001,,,,
 2006-016A,CALIPSO,PROTEUS,2006-04-28,AAS Coratherm thermal software,,,,,,,,,,Gasbarr_etal_2007,,,,
 2006-041A,Hinode,EUV Imaging Spectrometer (EIS),2006-09-22,ESATAN,,ESARAD,,,,,,,,Castelli_etal_2005,,,,

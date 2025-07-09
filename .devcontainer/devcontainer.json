@@ -17,6 +17,7 @@
 				"esbenp.prettier-vscode",
 				"dbaeumer.vscode-eslint",
 				"astro-build.astro-vscode",
+				"james-yu.latex-workshop",
 				"github.copilot",
 				"github.copilot-chat"
 			]
